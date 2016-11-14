@@ -1,2 +1,2 @@
-# Syndrome
-Syncronize your wallpapers around your devices
+# Symbiose
+Syncronize your wallpapers between your devices
