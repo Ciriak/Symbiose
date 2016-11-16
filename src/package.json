@@ -1,0 +1,41 @@
+{
+  "name": "symbiose",
+  "version": "0.0.1",
+  "description": "An advanced Mp3 metadata editor",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CYRIAQU3/Symbiose.git"
+  },
+  "keywords": [
+    "Symbiose",
+    "Wallpaper"
+  ],
+  "author": "Cyriaque DELAUNAY",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CYRIAQU3/Symbiose/issues"
+  },
+  "homepage": "https://github.com/CYRIAQU3/Symbiose#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "body-parser": "^1.15.0",
+    "browser-id3-writer": "^2.3.1",
+    "command-line-args": "^3.0.0",
+    "del": "^2.2.0",
+    "electron-gh-releases": "^2.0.3",
+    "fast-image-downloader": "0.0.4",
+    "file-exists": "^1.0.0",
+    "fs-sync": "^1.0.3",
+    "id3-parser": "^1.0.2",
+    "lodash": "^4.16.4",
+    "node-id3": "0.0.4",
+    "package-script": "0.0.8",
+    "random-gen": "^0.1.0",
+    "regedit": "^2.2.6",
+    "remote": "^0.2.6",
+    "request": "^2.75.0",
+    "sanitize-filename": "^1.6.1",
+    "windows-shortcuts": "^0.1.4"
+  }
+}
