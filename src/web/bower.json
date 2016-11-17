@@ -1,18 +1,15 @@
 {
-  "name": "Tagifier",
-  "description": "Download Youtube video as tagged mp3 files",
+  "name": "symbiose",
+  "description": "",
   "main": "app.js",
   "authors": [
     "Cyriaque DELAUNAY"
   ],
   "license": "ISC",
   "keywords": [
-    "tagifier",
-    "mp3",
-    "metadata",
-    "tag"
+    "wallpaper"
   ],
-  "homepage": "https://github.com/CYRIAQU3/tagifier",
+  "homepage": "https://github.com/CYRIAQU3/Symbiose",
   "moduleType": [
     "globals"
   ],
@@ -34,10 +31,8 @@
     "angular-translate-loader-static-files": "^2.11.0",
     "bootstrap": "^3.3.6",
     "angular-bootstrap": "^1.3.2",
-    "socket.io-client": "^1.4.6",
     "angular-electron": "^0.2.1",
-    "lodash": "^4.13.1",
-    "angular-audio": "^1.7.2"
+    "lodash": "^4.13.1"
   },
   "resolutions": {
     "angular": ">=1.2.26 <1.6"

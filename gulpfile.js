@@ -23,7 +23,7 @@ var winInstaller = require('electron-winstaller');
 var pjson = require('./src/package.json');
 
 gulp.task('sass', function () {
-  return gulp.src('./src/web/style/**/*.scss')
+  return gulp.src('./src/web/styles/**/*.scss')
     .pipe(plumber())
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
     .pipe(gulp.dest('./dist/web/css'));
@@ -46,7 +46,7 @@ gulp.task('scripts', function() {
     .pipe(plumber())
     .pipe(ngmin())
   	.pipe(uglify({mangle: false}))
-    .pipe(concat('tagifier.js'))
+    .pipe(concat('symbiose.js'))
     .pipe(gulp.dest('./dist/web/js/'));
 });
 
@@ -122,7 +122,7 @@ gulp.task('asar', function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('./src/web/style/**/*.scss', ['sass']);
+  gulp.watch('./src/web/styles/**/*.scss', ['sass']);
   gulp.watch('./src/web/**/*.html', ['html']);
   gulp.watch('./src/web/**/*.js', ['scripts']);
   gulp.watch('./src/*', ['copy-electron-components']);
@@ -131,7 +131,7 @@ gulp.task('watch', function () {
 gulp.task('create-windows-installer',function(){
   del('./release/**/*');
   return resultPromise = winInstaller.createWindowsInstaller({
-    appDirectory: './build/tagifier-win32-x64',
+    appDirectory: './build/symbiose-win32-x64',
     outputDirectory: './release',
     title: pjson.name,
     description: pjson.name,
@@ -139,10 +139,10 @@ gulp.task('create-windows-installer',function(){
     authors: pjson.author,
     iconUrl: __dirname+'/dist/web/img/tgf/icon_circle.ico',
     setupIcon : './dist/web/img/tgf/icon_setup.ico',
-    exe: 'Tagifier.exe',
+    exe: 'Symbiose.exe',
     setupExe:'Setup.exe',
     noMsi : true,
-    title : 'Tagifier'
+    title : 'Symbiose'
   });
 
   console.log(iconUrl);
