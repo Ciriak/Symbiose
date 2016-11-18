@@ -14,12 +14,10 @@ var regedit = require('regedit');
 let mainWindow
 //retreive package.json properties
 var pjson = require('./package.json');
-var fs = require('fs-sync');
 var ofs = require('fs');  // old fs
 var util = require('util');
 var port = 80;
 var request = require('request');
-var id3 = require('node-id3');
 var os = require('os');
 var _ = require('lodash');
 var bodyParser = require('body-parser');
@@ -140,7 +138,6 @@ app.on('window-all-closed', function () {
 
 app.on('ready', () => {
   openApp();
-  registerProtocol();
 });
 
 app.on('activate', function () {
@@ -154,15 +151,19 @@ app.on('activate', function () {
 //open the tagifier main process
 function openApp(){
   var mainWindow = new BrowserWindow({
-    show:false,
-    width: 1024,
-    height: 600,
-    minWidth: 1024,
+    show: false,
+    width: 800,
+    height: 400,
+    skipTaskbar : true,
+    center: true,
+    resizable : false,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
   mainWindow.loadURL(`file://${__dirname}/web/index.html`);
   //display the main app and close the
   mainWindow.once('ready-to-show', () => {
+    //hide menu bar
+    mainWindow.setMenu(null);
     mainWindow.show();
     mainWindow.focus();
     checkUpdates();

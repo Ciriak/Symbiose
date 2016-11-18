@@ -1,32 +1,23 @@
 <!doctype html>
-<html ng-app="tagifier" ng-controller="mainCtrl">
+<html ng-app="symbiose" ng-controller="mainCtrl">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tagifier</title>
     <link rel="icon" type="image/png" href="img/tgf/favicon.png" />
-    <link rel="stylesheet" href="dep/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="dep/mdi/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="dep/animate.css/animate.min.css">
-    <link rel="stylesheet" href="css/tagifier.css" />
+    <link rel="stylesheet" href="css/symbiose.css" />
   </head>
-  <body ng-controller="fileCtrl">
+  <body>
 
-	  <div ng-include="'views/file.html'"></div>
-
-    <div class="update-panel" ng-show="updateAvailable && !updateDownloading" ng-click="installUpdate()">
-      {{ 'global.update' | translate }}
-    </div>
-    <div class="downloading-update" ng-show="updateDownloading && !updateAvailable" title="{{ 'global.updateDownloading' | translate }}">
-      <img ng-src="img/update-download.svg" alt="Downloading update" />
-    </div>
+	  <div ng-include="'views/options.html'"></div>
 
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
     <script src="dep/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="dep/angular/angular.min.js"></script>
-    <script src="dep/socket.io-client/socket.io.js"></script>
     <!-- used to cummunicate with angular & electron -->
     <script src="dep/angular-electron/angular-electron.min.js"></script>
     <!-- -->
@@ -34,8 +25,7 @@
     <script src="dep/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="dep/angular-translate/angular-translate.min.js"></script>
     <script src="dep/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
-    <script src="dep/angular-audio/app/angular.audio.js"></script>
     <script src="dep/lodash/dist/lodash.min.js"></script>
-    <script src="js/tagifier.js"></script>
+    <script src="js/symbiose.js"></script>
   </body>
 </html>
