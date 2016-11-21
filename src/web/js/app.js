@@ -23,6 +23,8 @@ app.filter("trustUrl", ['$sce', function ($sce) { //used by media player
 
 app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window','$location', function($scope, $http,$rootScope,$translate,$window,$location)
 {
+  $scope.page = "wallpapers";   //default page
+
   $rootScope.remote = require('electron').remote;
   $rootScope.ipc = $rootScope.remote.ipcMain;
 

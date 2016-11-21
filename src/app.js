@@ -10,6 +10,7 @@ const appFolder = path.resolve(process.execPath, '..');
 const rootAtomFolder = path.resolve(appFolder, '..');
 const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = "Symbiose.exe";
+require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 let mainWindow
 //retreive package.json properties
