@@ -12,7 +12,10 @@
   </head>
   <body>
 
-	  <div ng-include="'views/index.html'"></div>
+    <!-- sidebar -->
+    <div ng-include="'views/sidebar.html'"></div>
+    <!-- main nav -->
+    <div class="content" ng-include="'views/'+page+'.html'"></div>
 
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>

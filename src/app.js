@@ -153,11 +153,9 @@ app.on('activate', function () {
 function openApp(){
   var mainWindow = new BrowserWindow({
     show: false,
-    width: 800,
-    height: 400,
     skipTaskbar : true,
     center: true,
-    resizable : false,
+    resizable : true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
   mainWindow.loadURL(`file://${__dirname}/web/index.html`);
@@ -208,7 +206,19 @@ function checkUpdates(){
   })
 }
 
-//
+function checkScreens(){
+
+}
+
+// client request update instalation
 ipc.on('installUpdate', function (fileData) {
   updater.install();
+});
+
+//client request screen infos
+ipc.on('screensInfos', function(){
+  var screens = electron.screen.getAllDisplays();
+  console.log("Sending screen info to the client");
+  console.log(screens);
+  ipc.emit("screens", screens);
 });

@@ -1,1 +1,9 @@
-wallpapers
+<div ng-controller="wallpaperCtrl">
+  <div class="screens-carrousel">
+    <div class="screen previous">prev</div>
+    <div class="screen" ng-repeat="screen in screens">
+      {{screen.size.width}}X{{screen.size.height}}
+    </div>
+    <div class="screen next">next</div>
+  </div>
+</div>

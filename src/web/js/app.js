@@ -25,6 +25,13 @@ app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window
 {
   $scope.page = "wallpapers";   //default page
 
+  $scope.setPage = function(page){
+    $scope.page = page;
+    if(!$scope.$$phase) {
+      $scope.$apply();
+    }
+  }
+
   $rootScope.remote = require('electron').remote;
   $rootScope.ipc = $rootScope.remote.ipcMain;
 
@@ -35,6 +42,13 @@ app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window
       $scope.$apply();
     }
   });
+
+  $rootScope.ipc.on("screens", function(screens){
+		$rootScope.screens = screens;
+    if(!$scope.$$phase) {
+      $scope.$apply();
+    }
+	});
 
   $rootScope.ipc.on("updateAvailable", function(){
     $rootScope.updateAvailable = true;
