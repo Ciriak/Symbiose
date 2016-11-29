@@ -21,7 +21,7 @@ app.filter("trustUrl", ['$sce', function ($sce) { //used by media player
     };
 }]);
 
-app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window','$location', function($scope, $http,$rootScope,$translate,$window,$location)
+app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$window', '$location', 'ipcRenderer', function($scope, $http, $rootScope, $translate, $window, $location, ipcRenderer)
 {
   $scope.page = "wallpapers";   //default page
 
@@ -32,25 +32,15 @@ app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window
     }
   }
 
-  $rootScope.remote = require('electron').remote;
-  $rootScope.ipc = $rootScope.remote.ipcMain;
-
   //player logged
-  $rootScope.ipc.on("updateDownloading", function(update){
+  ipcRenderer.on("updateDownloading", function(update){
     $rootScope.updateDownloading = true;
     if(!$scope.$$phase) {
       $scope.$apply();
     }
   });
 
-  $rootScope.ipc.on("screens", function(screens){
-		$rootScope.screens = screens;
-    if(!$scope.$$phase) {
-      $scope.$apply();
-    }
-	});
-
-  $rootScope.ipc.on("updateAvailable", function(){
+  ipcRenderer.on("updateAvailable", function(){
     $rootScope.updateAvailable = true;
     if(!$scope.$$phase) {
       $scope.$apply();
@@ -58,7 +48,7 @@ app.controller('mainCtrl', ['$scope', '$http','$rootScope','$translate','$window
   });
 
   $rootScope.installUpdate = function(){
-    $rootScope.ipc.emit("installUpdate");
+    ipcRenderer.send("installUpdate");
   }
 
 }]);

@@ -206,19 +206,7 @@ function checkUpdates(){
   })
 }
 
-function checkScreens(){
-
-}
-
 // client request update instalation
 ipc.on('installUpdate', function (fileData) {
   updater.install();
-});
-
-//client request screen infos
-ipc.on('screensInfos', function(){
-  var screens = electron.screen.getAllDisplays();
-  console.log("Sending screen info to the client");
-  console.log(screens);
-  ipc.emit("screens", screens);
 });

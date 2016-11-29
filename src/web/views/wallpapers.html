@@ -1,7 +1,7 @@
 <div ng-controller="wallpaperCtrl">
   <div class="screens-carrousel">
     <div class="screen previous">prev</div>
-    <div class="screen" ng-repeat="screen in screens">
+    <div class="screen" ng-repeat="screen in screens.displays" ng-attr-id="screen-{{screen.id}}" ng-style="{'background-image':'url('+screen.wallpaper.uri+')', 'width':screen.container.width+'%'}">
       {{screen.size.width}}X{{screen.size.height}}
     </div>
     <div class="screen next">next</div>
