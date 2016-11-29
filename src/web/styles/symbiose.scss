@@ -1,9 +1,11 @@
-$main-bg: #354052;
-$main-text: #AFBACC;
+$side-bg: #282B30;
+$side-text: #AEAFB1;
+$content-bg: #2E3136;
+$content-text: #FFFFFF;
 
 body{
-  background-color: $main-bg;
-  color: $main-text;
+  background-color: $side-bg;
+  color: $side-text;
   font-family: Arial;
 }
 
@@ -23,15 +25,14 @@ body{
     margin: 10px 0px 10px 0px;
     list-style-type: none;
     transition-duration: 0.5s;
-    color: $main-text;
+    color: $side-text;
     border-left: 3px transparent solid;
     p{
       display: inline-block;
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
     i{
-      font-size: 1.5rem;
-      float: left;
+      font-size: 1rem;
       padding-right: 10px;
     }
   }
@@ -39,17 +40,26 @@ body{
     color: #fff;
   }
   li:first-child{
+    margin-top: 0;
+    p, i{
+      font-size: 1.2rem;
+    }
+  }
+  li.active{
     border-color:#0DA2FC;
+    color: #fff;
   }
 }
 
 .content{
-  background-color: #171717;
+  background-color: $content-bg;
+  color: $content-text;
   top: 0;
   left: 200px;;
   width: calc(100% - 200px;);
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: absolute;
   .screens-carrousel{
     width: 80%;
@@ -61,16 +71,16 @@ body{
       display: inline-block;
       background-color: #cccccc;
       background-size: cover;
-      border: 1px #000 solid;
-      border-radius: 2px;
+      border: 2px #1E2124 solid;
+      border-radius: 3px;
     }
     .screen.previous{
-      display: none;
+      position: absolute;
       width: 20%;
-      margin-left: -10%;
+      margin-left: calc(-20% - 4px);
     }
     .screen.next{
-      display: none;
+      position: absolute;
       width: 20%;
       margin-right: -10%;
     }

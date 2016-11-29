@@ -1,13 +1,13 @@
 <ul class="sidebar">
-  <li>
+  <li ng-class="{'active' : page == 'wallpapers'}" ng-click="setPage('wallpapers');">
     <i class="mdi mdi-desktop-mac"></i>
     <p>Screen</p>
   </li>
-  <li>
+  <li ng-class="{'active' : page == 'reddit'}" ng-click="setSource('reddit');">
     <i class="mdi mdi-reddit"></i>
     <p>Lorem</p>
   </li>
-  <li>
+  <li ng-class="{'active' : page == 'artstation'}" ng-click="setSource('artstation');">
     <i class="mdi mdi-reddit"></i>
     <p>Ipsum</p>
   </li>

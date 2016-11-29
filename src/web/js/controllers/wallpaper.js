@@ -3,13 +3,15 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	$scope.screens.displays = screen.getAllDisplays();
 	$scope.screens.dimensions = {
 		totalWidth: 0,
-		maxHeight: 0
+		maxHeight: 0,
+		maxHeightItemIndex: null
 	};
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 
 		$scope.screens.dimensions.totalWidth += $scope.screens.displays[i].size.width;
 		if($scope.screens.displays[i].size.height > $scope.screens.dimensions.maxHeight){
 			$scope.screens.dimensions.maxHeight = $scope.screens.displays[i].size.height;
+			$scope.screens.dimensions.maxHeightItemIndex = i;
 		}
 
 		$scope.screens.displays[i].wallpaper = {
@@ -27,7 +29,15 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	}
 
 	$(window).on('resize', function(){
+		genSizes();
+	});
 
+	$(document).ready(function(){
+		genSizes();
+	});
+
+	function genSizes(){
+		//update the screens sizes
 		for (var i = 0; i < $scope.screens.displays.length; i++) {
 			var item = $("#screen-"+$scope.screens.displays[i].id);
 			var nw = item.width();
@@ -35,5 +45,11 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 			var height = $scope.screens.displays[i].size.height*r;
 			item.css("height", height);
 		}
-	});
+
+		$(".screen.next, .screen.previous").each(function(){
+			var mh = $("#screen-"+$scope.screens.displays[$scope.screens.dimensions.maxHeightItemIndex].id).height();
+			$(this).css("height", mh);
+		});
+	}
+
 });

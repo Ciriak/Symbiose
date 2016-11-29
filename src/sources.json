@@ -1,0 +1,6 @@
+{
+  "artStation": {
+    "label": "Art Station",
+    "baseUri": "https://www.artstation.com/projects.json"
+  }
+}

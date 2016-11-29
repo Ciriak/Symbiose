@@ -30,7 +30,12 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     if(!$scope.$$phase) {
       $scope.$apply();
     }
-  }
+  };
+
+  $scope.setSource = function(source){
+    $rootScope.source = source;
+    $scope.setPage(source);
+  };
 
   //player logged
   ipcRenderer.on("updateDownloading", function(update){

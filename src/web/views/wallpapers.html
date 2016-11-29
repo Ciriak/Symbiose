@@ -4,6 +4,6 @@
     <div class="screen" ng-repeat="screen in screens.displays" ng-attr-id="screen-{{screen.id}}" ng-style="{'background-image':'url('+screen.wallpaper.uri+')', 'width':screen.container.width+'%'}">
       {{screen.size.width}}X{{screen.size.height}}
     </div>
-    <div class="screen next">next</div>
+    <div class="screen next" ng-style="{'height':screens.dimensions.maxHeight+'px'}">next</div>
   </div>
 </div>
