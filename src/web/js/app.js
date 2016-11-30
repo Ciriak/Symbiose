@@ -34,7 +34,7 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
 
   $scope.setSource = function(source){
     $rootScope.source = source;
-    $scope.setPage(source);
+    $scope.setPage("sources");
   };
 
   //player logged
