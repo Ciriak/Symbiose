@@ -1,5 +1,4 @@
-<div class="gallery">
-  <div class="wallpaper" ng-repeat="wallpaper in gallery">
-    Img
-  </div>
+<div class="gallery" ng-controller="sourceCtrl">
+  <div class="wallpaper" ng-repeat="wallpaper in gallery.source.wallpapers" ng-style="{'background-image': 'url('+wallpaper.url+')'}" ng-click="gallery.preview.set(wallpaper)"></div>
 </div>
+<div class="preview" ng-click="gallery.preview.close()" ng-hide="gallery.preview.wallpaper == null" ng-style="{'background-image': 'url('+gallery.preview.wallpaper.url+')'}"></div>

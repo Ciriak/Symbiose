@@ -26,6 +26,7 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
   $scope.page = "wallpapers";   //default page
 
   $scope.setPage = function(page){
+    console.log("Setting page "+page);
     $scope.page = page;
     if(!$scope.$$phase) {
       $scope.$apply();
