@@ -2,87 +2,63 @@ app.controller('sourceCtrl', function($scope, $rootScope, $http, $translate, $lo
 
 	$scope.gallery = {
 		source: null,
+		loading: true,
 		preview: {
+			show: false,
 			set: function(wallpaper){
-				console.log('set');
 				$scope.gallery.preview.wallpaper = wallpaper;
-				console.log($scope.gallery.preview.wallpaper);
+				$scope.gallery.preview.show = true;
 				if(!$scope.$$phase) {
 		      $scope.$apply();
 		    }
 			},
 			close: function(){
 				$scope.gallery.preview.wallpaper = null;
+				$scope.gallery.preview.show = false;
 			}
-		}
-	};
+		},
+		retreive: function(sourceName){
+			this.loading = true;
+			//Create wallpaper object
+			if(!$scope.sources[sourceName].wallpapers){
+				$scope.sources[sourceName].wallpapers = [];
+			}
+			//don't redo the request if already done
+			if($scope.sources[sourceName].wallpapers.length > 0){
+				$scope.gallery.source = $scope.sources[sourceName];
+				return;
+			}
 
-	/* Final format expected
-  {
-    source : {
-      name: "/r/earthporn",
-      label: "Reddit Earthporn",
-      icon: "mdi-reddit",
-      wallpapers:[
-        {
-          id: 01021457,
-          title: "Lorem ipsum",
-          description: "Lorem ipsum",
-          format: {
-            width: 550,
-            height: 300
-          },
-          url: "http://lorempisum.com/15521.jpg"
-        }
-      ]
-    }
-  }
+			var s = $scope.sources[sourceName];
 
-  */
-
-
-  /*
-  Retreive data from available sources below
-  */
-
-  $scope.retreive = {
-		"artStation": function(){
-			console.log("retreiving wallpapers...");
+			//Start the request
 			$http({
 			  method: 'GET',
-			  url: 'https://www.artstation.com/projects.json?page=1&sorting=picks'
+			  url: s.api.base
 			}).then(function successCallback(response) {
-        var r = {
-          name: "artStation",
-          label: "Art Station",
-          icon: "mdi-buffer",
-          wallpapers: []
-        };
-
-        for (var i = 0; i < response.data.data.length; i++) {
-          var wd = response.data.data[i];
-          var wallpaper = {
-            title: wd.title,
-            description: wd.description,
-            author: wd.user.username
-          }
-
-					if(!wd.cover.small_image_url){
-						continue;
+				var wp = objectPath.get(response.data, s.api.wallpapers.path);
+				for (var i = 0; i < wp.length; i++) {
+					var w = {};
+					w.title = objectPath.get(wp[i], s.api.wallpapers.title);
+					//pass through all properties and assign them following the model
+					for (var prop in s.api.wallpapers) {
+						if (s.api.wallpapers.hasOwnProperty(prop)) {
+							if(prop !== "path"){
+								w[prop] = objectPath.get(wp[i], s.api.wallpapers[prop]);
+							}
+						}
 					}
-					wallpaper.url = wd.cover.medium_image_url.replace("/medium/", "/large/");
+					$scope.sources[$rootScope.currentSource].wallpapers.push(w);
+		    }
 
-          r.wallpapers.push(wallpaper);
-        }
-				$scope.gallery.source = r;
-				console.log($scope.gallery);
+				$scope.gallery.loading = false;
+		  }, function errorCallback(response) {
+		    console.log("Error while retreiving data !");
+		  });
 
-			  }, function errorCallback(response) {
-					console.log("error");
-			  });
 		}
 	};
 
-	$scope.retreive[$rootScope.source]();
+	$scope.gallery.retreive($rootScope.currentSource);
 
 });

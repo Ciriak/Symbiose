@@ -15,6 +15,7 @@ var regedit = require('regedit');
 let mainWindow
 //retreive package.json properties
 var pjson = require('./package.json');
+var sources = require('./sources.json');
 var ofs = require('fs');  // old fs
 var util = require('util');
 var port = 80;
@@ -179,6 +180,11 @@ var p = app.getPath("temp")+"/tagifier";
 if (!ofs.existsSync(p)){
     ofs.mkdirSync(p);
 }
+
+//send the wallpaper sources to the client when asked
+ipc.on('sources', function(event) {
+  event.returnValue = sources;
+});
 
 function checkUpdates(){
 

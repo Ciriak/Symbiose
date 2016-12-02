@@ -33,8 +33,8 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     }
   };
 
-  $scope.setSource = function(source){
-    $rootScope.source = source;
+  $scope.setSource = function(sourceName){
+    $rootScope.currentSource = sourceName;
     $scope.setPage("sources");
   };
 
@@ -55,6 +55,11 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
 
   $rootScope.installUpdate = function(){
     ipcRenderer.send("installUpdate");
+  }
+
+  $rootScope.sources = ipcRenderer.sendSync('sources');
+  if(!$scope.$$phase) {
+    $scope.$apply();
   }
 
 }]);

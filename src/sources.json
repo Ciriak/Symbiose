@@ -1,7 +1,35 @@
 {
   "artStation": {
     "label": "Art Station",
-    "baseUri": "https://www.artstation.com/search/projects.json?direction=desc&order=published_at&page=1&q=landscape"
+    "api": {
+      "base": "https://www.artstation.com/projects.json?sorting=picks",
+      "wallpapers": {
+        "path": ["data"],
+        "title": ["title"],
+        "description": ["description"],
+        "author": ["user", "username"],
+        "url": ["cover", "medium_image_url"]
+      }
+    },
+    "icon": {
+      "mdi": "deviantart",
+      "url": false
+    }
   },
-  "earthporn"
+  "reddit": {
+    "label": "Reddit",
+    "api": {
+      "base": "https://www.reddit.com/r/wallpapers/top/.json?count=50",
+      "wallpapers": {
+        "path": ["data", "children"],
+        "title": ["data", "title"],
+        "author": ["data", "author"],
+        "url": ["data", "url"]
+      }
+    },
+    "icon": {
+      "mdi": "reddit",
+      "url": false
+    }
+  }
 }
