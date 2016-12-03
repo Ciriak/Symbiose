@@ -87,19 +87,42 @@ body{
   }
 }
 
-.wallpaper{
-  width: 20%;
-  height: 15vh;
-  background-size: cover;
-  display: inline-block;
-}
-
-.preview{
-  position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
+.gallery{
+  .preview{
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  }
+  .gallery-wallpapers{
+    width: 80%;
+    .wallpaper{
+      width: 20%;
+      height: 15vh;
+      background-size: cover;
+      display: inline-block;
+    }
+  }
+  .gallery-menu{
+    margin: 0;
+    padding: 20px 10px 10px 10px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 20%;
+    background-color: $side-bg;
+    color: $side-text;
+    li{
+      list-style-type: none;
+      width: 100%;
+      i, img{
+        display: inline-block;
+        margin-right: 10px;
+      }
+    }
+  }
 }

@@ -33,11 +33,6 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     }
   };
 
-  $scope.setSource = function(sourceName){
-    $rootScope.currentSource = sourceName;
-    $scope.setPage("sources");
-  };
-
   //player logged
   ipcRenderer.on("updateDownloading", function(update){
     $rootScope.updateDownloading = true;

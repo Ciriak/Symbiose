@@ -3,9 +3,8 @@
     <i class="mdi mdi-desktop-mac"></i>
     <p>Screen</p>
   </li>
-  <li ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}" ng-click="setSource(sourceName);">
-    <i ng-if="source.icon.mdi" class="mdi mdi-{{source.icon.mdi}}"></i>
-    <img ng-if="source.icon.url" ng-src="{{source.icon.url}}">
-    <p>{{source.label}}</p>
+  <li ng-class="{'active' : page == 'gallery'}" ng-click="setPage('gallery');">
+    <i class="mdi mdi-image-area"></i>
+    <p>Gallery</p>
   </li>
 </ul>

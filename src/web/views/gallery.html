@@ -1,0 +1,23 @@
+<div class="gallery" ng-controller="galleryCtrl">
+  <div class="preview" ng-click="gallery.preview.close()" ng-show="gallery.preview.show" ng-style="{'background-image': 'url('+gallery.preview.wallpaper.url+')'}"></div>
+
+  <div class="gallery-wallpapers">
+    <div class="wallpaper"
+      ng-repeat="wallpaper in gallery.wallpapers track by $index|orderBy:random"
+      ng-style="{'background-image': 'url('+wallpaper.url+')'}"
+      ng-click="gallery.preview.set(wallpaper)">
+    </div>
+  </div>
+  <ul class="gallery-menu">
+    <li>
+      <i class="mdi mdi-magnify"></i>
+      <input type="text" ng-model="gallery.search">
+    </li>
+    <li ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}">
+      <i ng-if="source.icon.mdi" class="mdi mdi-{{source.icon.mdi}}"></i>
+      <img ng-if="source.icon.url" ng-src="{{source.icon.url}}">
+      <p>{{source.label}}</p>
+    </li>
+  </ul>
+
+</div>

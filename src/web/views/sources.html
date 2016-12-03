@@ -1,9 +1,0 @@
-<div class="gallery" ng-controller="sourceCtrl">
-  <span ng-show="gallery.loading">LOADING...</span>
-  <div class="preview" ng-click="gallery.preview.close()" ng-show="gallery.preview.show" ng-style="{'background-image': 'url('+gallery.preview.wallpaper.url+')'}"></div>
-  <div class="wallpaper"
-    ng-repeat="wallpaper in sources[currentSource].wallpapers track by $index"
-    ng-style="{'background-image': 'url('+wallpaper.url+')'}"
-    ng-click="gallery.preview.set(wallpaper)">
-  </div>
-</div>
