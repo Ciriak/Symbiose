@@ -6,6 +6,7 @@
       "wallpapers": {
         "path": ["data"],
         "title": ["title"],
+        "id": ["id"],
         "description": ["description"],
         "author": ["user", "username"],
         "url": ["cover", "medium_image_url"]
@@ -24,7 +25,8 @@
         "path": ["data", "children"],
         "title": ["data", "title"],
         "author": ["data", "author"],
-        "url": ["data", "url"]
+        "url": ["data", "url"],
+        "id": ["data", "id"]
       }
     },
     "icon": {
