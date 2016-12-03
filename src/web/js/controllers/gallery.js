@@ -8,6 +8,7 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 		preview: {
 			show: false,
 			set: function(wallpaper){
+				console.log(wallpaper);
 				$scope.gallery.preview.wallpaper = wallpaper;
 				$scope.gallery.preview.show = true;
 				if(!$scope.$$phase) {
@@ -66,24 +67,40 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 	}
 
 	function filterData(sourceProps, data, callback){
+		var required = ["id", "title", "url"];
 		var wp = objectPath.get(data.data, sourceProps.api.wallpapers.path);
 		for (var i = 0; i < wp.length; i++) {
 			var w = {};
-			w.title = objectPath.get(wp[i], sourceProps.api.wallpapers.title);
-			//pass through all properties and assign them following the model
-			for (var prop in sourceProps.api.wallpapers) {
-				if (sourceProps.api.wallpapers.hasOwnProperty(prop)) {
-					if(prop !== "path"){
-						w[prop] = objectPath.get(wp[i], sourceProps.api.wallpapers[prop]);
-					}
-				}
-			}
 			//create an unique id for each wallpaper
 			w.id = genId(sourceProps, w);
 
-			$scope.gallery.wallpapers.push(w);
-			callback();
+			//stop if the file alreadyExist
+			var t = _.findIndex($scope.gallery.wallpapers, { 'id': w.id });
+			if(t > -1){
+				console.log("Wallpaper "+w.id+" is already in the gallery, abording...");
+				continue;
+			}
+
+
+			//pass through all properties and assign them following the model
+			var abord = false;
+			for (var prop in sourceProps.api.wallpapers) {
+				if(prop !== "path"){
+					w[prop] = objectPath.get(wp[i], sourceProps.api.wallpapers[prop]);
+					//we check if the prop is required
+					if(required.indexOf(prop) > -1 && (!w[prop] || w[prop] == "")){
+						//one required prop is missing, told the script to not add the wallpaper at the end of the process
+						console.log("Propertie "+prop+" is missing for wallpaper "+w.id+" !");
+						abord = true;
+					}
+				}
+			}
+			if(!abord){
+				console.log("Adding image "+w.id+" to the gallery");
+				$scope.gallery.wallpapers.push(w);
+			}
 		}
+		callback();
 	}
 
 	function genId(source, wallpaper){
@@ -94,7 +111,7 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 			}
 			i++;
 		}
-		console.log(i+"-"+wallpaper.id);
+		return i+"-"+wallpaper.id;
 	}
 
 });
