@@ -1,8 +1,12 @@
 {
   "artStation": {
     "label": "Art Station",
+    "icon": "http://matt-therrien.com/img/Artstation.png",
     "api": {
-      "base": "https://www.artstation.com/projects.json?sorting=picks",
+      "uris": {
+        "base": "https://www.artstation.com/projects.json?sorting=picks",
+        "search": "https://www.artstation.com/search/projects.json?direction=desc&order=likes_count&page=1&q=%1&show_pro_first=false"
+      },
       "wallpapers": {
         "path": ["data"],
         "title": ["title"],
@@ -11,16 +15,16 @@
         "author": ["user", "username"],
         "url": ["cover", "medium_image_url"]
       }
-    },
-    "icon": {
-      "mdi": "deviantart",
-      "url": false
     }
   },
-  "reddit": {
-    "label": "Reddit",
+  "redditWallpapers": {
+    "label": "/r/wallpapers",
+    "icon": "http://www.iconsdb.com/icons/preview/white/reddit-xxl.png",
     "api": {
-      "base": "https://www.reddit.com/r/wallpapers/top/.json?count=50",
+      "uris": {
+        "base": "https://www.reddit.com/r/wallpapers/top/.json?count=50",
+        "search": "https://www.reddit.com/r/wallpapers/search/.json?q=%1&restrict_sr=true"
+      },
       "wallpapers": {
         "path": ["data", "children"],
         "title": ["data", "title"],
@@ -28,10 +32,6 @@
         "url": ["data", "url"],
         "id": ["data", "id"]
       }
-    },
-    "icon": {
-      "mdi": "reddit",
-      "url": false
     }
   }
 }

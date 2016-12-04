@@ -104,6 +104,10 @@ body{
       height: 15vh;
       background-size: cover;
       display: inline-block;
+      .source-icon{
+        width: 24px;
+        height: 24px;
+      }
     }
   }
   .gallery-menu{
@@ -119,9 +123,11 @@ body{
     li{
       list-style-type: none;
       width: 100%;
-      i, img{
+      img{
         display: inline-block;
         margin-right: 10px;
+        width: 24px;
+        height: 24px;
       }
     }
   }
