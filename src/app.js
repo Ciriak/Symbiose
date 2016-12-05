@@ -10,12 +10,14 @@ const appFolder = path.resolve(process.execPath, '..');
 const rootAtomFolder = path.resolve(appFolder, '..');
 const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = "Symbiose.exe";
+const storage = require('electron-storage');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 let mainWindow
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
+var settings = {};
 var util = require('util');
 var port = 80;
 var request = require('request');
@@ -169,7 +171,6 @@ app.on('activate', function () {
 function openApp(){
   var mainWindow = new BrowserWindow({
     show: false,
-    skipTaskbar : true,
     center: true,
     resizable : true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
@@ -182,6 +183,7 @@ function openApp(){
     mainWindow.webContents.session.clearCache(function(){ //clear cache
       mainWindow.show();
       mainWindow.focus();
+      loadSettings();
       checkUpdates();
     });
   });
@@ -190,6 +192,44 @@ function openApp(){
 //send the wallpaper sources to the client when asked
 ipc.on('sources', function(event) {
   event.returnValue = sources;
+});
+
+ipc.on('getSettings', function(event) {
+  event.returnValue = settings;
+});
+
+ipc.on('exist', function(event, path) {
+  var r = true;
+  fs.access(path, fs.constants.R_OK | fs.constants.W_OK, function(err){
+    if(err){
+      r = false;
+    }
+    event.returnValue = r;
+  });
+
+});
+
+ipc.on('createFile', function(event, file, data) {
+  //to complete -> write data in created file
+  console.log(file);
+  fs.ensureFile(file, function (err) {
+    if(err){
+      event.returnValue = false;
+    }
+    else{
+      event.returnValue = true;
+    }
+  });
+});
+
+ipc.on('saveSettings', function(event, data){
+  settings = data;
+  storage.set("settings", data, function(err){
+    if (err) {
+      console.log(err);
+    }
+    event.sender.send('settingsSaved', err);
+  });
 });
 
 
@@ -357,6 +397,32 @@ function processWallpaper(event, wallpaper, callback){
 
       });
     });
+  });
+}
+
+function loadSettings(){
+  var sp = "settings";
+  storage.isPathExists(sp, function(exist){
+    if(exist){
+      storage.get(filePath, function(err, data){
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log("Settings file loaded");
+        settings = data;
+      });
+    }
+    else{
+      storage.set(sp, "", function(err) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("New settings file created");
+        settings = {};
+      });
+    }
   });
 }
 

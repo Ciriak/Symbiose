@@ -24,6 +24,7 @@
     "del": "^2.2.0",
     "electron-debug": "^1.1.0",
     "electron-gh-releases": "^2.0.3",
+    "electron-storage": "^1.0.7",
     "fast-image-downloader": "0.0.4",
     "file-exists": "^1.0.0",
     "fs-extra": "^1.0.0",

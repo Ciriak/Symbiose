@@ -1,0 +1,14 @@
+<div class="settings" ng-controller="settingsCtrl">
+  <h1 ng-click="settings.save()">Settings</h1>
+  <p>Lorem ipsum</p>
+
+  <ul>
+    <li>
+      <h1>Shared Folder</h1>
+      <p>Lorem ipsum</p>
+      <input type="text" ng-model="settings.values.settingsFile" ng-click="settings.settingsFile.select()" ng-blur="settings.save()">
+      <i ng-if="settings.settingsFile.valid" class="mdi mdi-check"></i>
+      <i ng-if="!settings.settingsFile.valid" class="mdi mdi-close"></i>
+    </li>
+  </ul>
+</div>
