@@ -5,7 +5,7 @@
 
   <div class="gallery-wallpapers">
     <div class="wallpaper"
-      ng-repeat="wallpaper in gallery.wallpapers track by $index|orderBy:random"
+      ng-repeat="wallpaper in gallery.wallpapers track by $index"
       ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
       ng-click="gallery.preview.set(wallpaper)">
 
