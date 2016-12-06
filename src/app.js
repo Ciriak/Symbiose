@@ -10,6 +10,7 @@ const appFolder = path.resolve(process.execPath, '..');
 const rootAtomFolder = path.resolve(appFolder, '..');
 const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = "Symbiose.exe";
+const wallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 let mainWindow
@@ -34,6 +35,7 @@ var objectPath = require("object-path");
 var probe = require('probe-image-size');
 var fs = require('fs-extra');
 var url = require('url');
+var Jimp = require("jimp");
 //img buffer keys
 var magic = {
     jpg: 'ffd8ffe0',
