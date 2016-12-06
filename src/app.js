@@ -229,7 +229,6 @@ ipc.on('getJson', function(event, path) {
 
 ipc.on('createFile', function(event, file, data) {
   //to complete -> write data in created file
-  console.log(file);
   fs.ensureFile(file, function (err) {
     if(err){
       event.returnValue = false;
@@ -242,17 +241,27 @@ ipc.on('createFile', function(event, file, data) {
 
 ipc.on('saveSettings', function(event, data){
   settings = data;
-  fs.writeJsonSync(data.local.localSettingsFile, data);
-  if(data.local.remoteSettingsFile){
-    fs.writeJson(settings.local.remoteSettingsFile, data, function (err) {
+  fs.writeJson(settings.local.localSettingsFile, data, function(err){
+    if(err){
+      console.log(err);
+    }
+    if(settings.local.remoteSettingsFile){
+      var remoteData = {};
+      for (var prop in data) {
+        if(prop !== "local"){
+          remoteData[prop] = data[prop];
+        }
+      }
+      fs.writeJson(settings.local.remoteSettingsFile, remoteData, function (err) {
+        event.sender.send('settingsSaved');
+        console.log("Settings saved remotely");
+      });
+    }
+    else{
       event.sender.send('settingsSaved');
-      console.log("Settings saved remotely");
-    });
-  }
-  else{
-    event.sender.send('settingsSaved');
-    console.log("Settings saved locally");
-  }
+      console.log("Settings saved locally");
+    }
+  });
 });
 
 
@@ -438,6 +447,9 @@ function processWallpaper(event, wallpaper, callback){
 function loadSettings(){
   //create local settings file if not exist
   fs.ensureFile(settings.local.localSettingsFile, function (err) {
+    if(err){
+      console.log(err);
+    }
     var sd = fs.readJsonSync(settings.local.localSettingsFile, {throws: false});
     if(sd === null){
       fs.writeJsonSync(settings.local.localSettingsFile, settings);

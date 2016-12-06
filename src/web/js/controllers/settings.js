@@ -2,7 +2,6 @@ app.controller('settingsCtrl', function($scope, $rootScope, $http, $translate, $
   $rootScope.settings = {
     values: null,
     save: function(){
-      console.log(this);
       ipcRenderer.send('saveSettings', this.values);
     },
     settingsFile : {
@@ -15,7 +14,7 @@ app.controller('settingsCtrl', function($scope, $rootScope, $http, $translate, $
           $rootScope.settings.values.local.remoteSettingsFile = path[0]+"\\symbiose.json";
           if(ipcRenderer.sendSync("exist", $rootScope.settings.values.local.remoteSettingsFile)){
             this.valid = true;
-            $rootScope.settings.values = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.remoteSettingsFile);
+            $rootScope.settings.values = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.localSettingsFile);
             $rootScope.settings.save();
           }
           else{
