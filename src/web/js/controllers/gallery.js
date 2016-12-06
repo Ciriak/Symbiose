@@ -14,7 +14,6 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 				if(!$scope.$$phase) {
 		      $scope.$apply();
 		    }
-				ipcRenderer.sendSync("setWallpaper", wallpaper);
 			},
 			close: function(){
 				$scope.gallery.preview.wallpaper = null;
@@ -26,6 +25,9 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 			this.loading = true;
 			//tell the server to send Data
 			ipcRenderer.send("retreiveData", uriType, $scope.gallery.search);
+		},
+		setWallpaper: function(wallpaper, screen){
+			ipcRenderer.sendSync("setWallpaper", wallpaper, screen);
 		}
 	};
 
