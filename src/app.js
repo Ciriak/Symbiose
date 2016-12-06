@@ -10,14 +10,19 @@ const appFolder = path.resolve(process.execPath, '..');
 const rootAtomFolder = path.resolve(appFolder, '..');
 const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = "Symbiose.exe";
-const storage = require('electron-storage');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 let mainWindow
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
-var settings = {};
+//local settings file
+var settings = {
+  local: {
+    localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
+    remoteSettingsFile: null
+  }
+};
 var util = require('util');
 var port = 80;
 var request = require('request');
@@ -209,6 +214,16 @@ ipc.on('exist', function(event, path) {
 
 });
 
+ipc.on('getJson', function(event, path) {
+  fs.readJson(path, function (err, result) {
+    if(err){
+      event.returnValue = false;
+      return;
+    }
+    event.returnValue = result;
+  });
+});
+
 ipc.on('createFile', function(event, file, data) {
   //to complete -> write data in created file
   console.log(file);
@@ -224,12 +239,17 @@ ipc.on('createFile', function(event, file, data) {
 
 ipc.on('saveSettings', function(event, data){
   settings = data;
-  storage.set("settings", data, function(err){
-    if (err) {
-      console.log(err);
-    }
-    event.sender.send('settingsSaved', err);
-  });
+  fs.writeJsonSync(data.local.localSettingsFile, data);
+  if(data.local.remoteSettingsFile){
+    fs.writeJson(settings.local.remoteSettingsFile, data, function (err) {
+      event.sender.send('settingsSaved');
+      console.log("Settings saved remotely");
+    });
+  }
+  else{
+    event.sender.send('settingsSaved');
+    console.log("Settings saved locally");
+  }
 });
 
 
@@ -401,27 +421,34 @@ function processWallpaper(event, wallpaper, callback){
 }
 
 function loadSettings(){
-  var sp = "settings";
-  storage.isPathExists(sp, function(exist){
-    if(exist){
-      storage.get(filePath, function(err, data){
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("Settings file loaded");
-        settings = data;
-      });
+  //create local settings file if not exist
+  fs.ensureFile(settings.local.localSettingsFile, function (err) {
+    var sd = fs.readJsonSync(settings.local.localSettingsFile, {throws: false});
+    if(sd === null){
+      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      console.log("Local settings file created");
     }
     else{
-      storage.set(sp, "", function(err) {
-        if (err) {
-          console.error(err);
-          return;
+      console.log("Local settings loaded");
+      settings = sd;
+    }
+    //if remoteSettings file is available
+    if(settings.local.remoteSettingsFile){
+      console.log("remoteSettings file available");
+      // read the remote file and override params
+      sd = fs.readJsonSync(settings.local.remoteSettingsFile, {throws: false});
+      if(sd !== null){
+        for (var param in sd) {
+          //ignore local params
+          if(param === "local"){
+            continue;
+          }
+          settings[param] = sd[param];
         }
-        console.log("New settings file created");
-        settings = {};
-      });
+        fs.writeJsonSync(settings.local.localSettingsFile, settings);
+        console.log("Remote settings loaded and applied");
+      }
+
     }
   });
 }

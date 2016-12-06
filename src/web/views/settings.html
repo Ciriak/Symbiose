@@ -6,9 +6,15 @@
     <li>
       <h1>Shared Folder</h1>
       <p>Lorem ipsum</p>
-      <input type="text" ng-model="settings.values.settingsFile" ng-click="settings.settingsFile.select()" ng-blur="settings.save()">
+      <input type="text" ng-model="settings.values.local.remoteSettingsFile" ng-click="settings.settingsFile.select()">
       <i ng-if="settings.settingsFile.valid" class="mdi mdi-check"></i>
       <i ng-if="!settings.settingsFile.valid" class="mdi mdi-close"></i>
+    </li>
+    <li>
+      <h1>Wallpaper Change</h1>
+      <p>Lorem ipsum</p>
+      Every <input type="number" min="1" max="60" ng-model="settings.values.wallpaper.changeDelay" ng-blur="settings.save()"> Minutes
+      <input type="checkbox" ng-model="settings.values.wallpaper.changeOnStartup" ng-blur="settings.save()"> Change on Startup
     </li>
   </ul>
 </div>
