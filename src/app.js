@@ -10,7 +10,7 @@ const appFolder = path.resolve(process.execPath, '..');
 const rootAtomFolder = path.resolve(appFolder, '..');
 const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = "Symbiose.exe";
-const wallpaper = require('wallpaper');
+const nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 let mainWindow
@@ -54,6 +54,7 @@ const updater = new GhReleases(options);
 
 // create the "temp" folder
 var tempDir = app.getPath("temp")+"/symbiose";
+var localDir = app.getPath("appData")+"/symbiose";
 if (!fs.existsSync(tempDir)){
   fs.mkdirSync(tempDir);
 }
@@ -273,6 +274,18 @@ ipc.on('retreiveData', function(event, uriType, search) {
         console.log(elems.added.length + " elements parsed");
         event.sender.send('queryEnd');
     });
+  });
+});
+
+ipc.on('setWallpaper', function(event, wallpaper){
+  console.log(wallpaper);
+  // open a file called "lenna.png"
+  Jimp.read(wallpaper.localUri, function (err, exp) {
+    if (err) throw err;
+      exp.write(localDir+"\\wallpaper.jpg"); // save
+           nodeWallpaper.set(localDir+"\\wallpaper.jpg");
+           event.returnValue = null;
+
   });
 });
 

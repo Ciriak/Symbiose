@@ -14,6 +14,7 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 				if(!$scope.$$phase) {
 		      $scope.$apply();
 		    }
+				ipcRenderer.sendSync("setWallpaper", wallpaper);
 			},
 			close: function(){
 				$scope.gallery.preview.wallpaper = null;
