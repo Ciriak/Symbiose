@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/CYRIAQU3/Symbiose#readme",
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "^1.15.0",
     "browser-id3-writer": "^2.3.1",
     "command-line-args": "^3.0.0",

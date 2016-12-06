@@ -36,6 +36,7 @@ var probe = require('probe-image-size');
 var fs = require('fs-extra');
 var url = require('url');
 var Jimp = require("jimp");
+var async = require('async');
 //img buffer keys
 var magic = {
     jpg: 'ffd8ffe0',
@@ -286,15 +287,11 @@ ipc.on('retreiveData', function(event, uriType, search) {
   });
 });
 
-ipc.on('setWallpaper', function(event, wallpaper){
-  console.log(wallpaper);
-  // open a file called "lenna.png"
-  Jimp.read(wallpaper.localUri, function (err, exp) {
-    if (err) throw err;
-      exp.write(localDir+"\\wallpaper.jpg"); // save
-           nodeWallpaper.set(localDir+"\\wallpaper.jpg");
-           event.returnValue = null;
-
+ipc.on('setWallpaper', function(event, wallpapers){
+  var screens = electron.screen.getAllDisplays();
+  createWallpaper(wallpapers, screens, function(image){
+    console.log("created");
+    event.returnValue = true;
   });
 });
 
@@ -522,6 +519,70 @@ function checkUpdates(){
 ipc.on('installUpdate', function (fileData) {
   updater.install();
 });
+
+function createWallpaper(wallpapers, screens, callback){
+  var stacks = [];
+  var frame = {
+    width: 0,
+    height: 0,
+    offsetX: 0,
+    offsetY: 0
+  };
+  //define the size of the "final" image
+  var oOffsetX = frame.offsetX;
+  var oOffsetY = frame.offsetY;
+  for (var i = 0; i < screens.length; i++) {
+    frame.width += screens[i].size.width;
+    if(screens[i].size.height > frame.height){
+      frame.height = screens[i].size.height;
+    }
+    if(screens[i].bounds.x < oOffsetX){
+      frame.offsetX = Math.abs(screens[i].bounds.x);
+    }
+    if(screens[i].bounds.y < oOffsetY){
+      frame.offsetY = Math.abs(screens[i].bounds.y);
+    }
+  }
+
+  for (var i = 0; i < screens.length; i++) {
+    stacks.push(createWallpaperFrame(screens[i], wallpapers[i]));
+  }
+
+  async.parallel(stacks, function(err, images) {
+    if(err){
+      console.log(err);
+      return;
+    }
+
+    var generated = new Jimp(frame.width, frame.height, function (err, generated) {
+      if(err){
+        console.log(err);
+      }
+      for (var i = 0; i < images.length; i++) {
+        var x = screens[i].bounds.x+frame.offsetX;
+        var y = screens[i].bounds.y+frame.offsetY;
+        console.log(y);
+        generated.composite( images[i], x, y );
+      }
+      generated.write(localDir+"\\wallpaper.jpg");
+      return callback();
+    });
+
+  });
+}
+
+var createWallpaperFrame = function(screen, wallpaper, callback){
+  return function(callback){
+    Jimp.read(wallpaper.localUri, function (err, image) {
+      if(err){
+        callback(err, null);
+      }
+      image.cover(screen.size.width, screen.size.height);
+      console.log("Frame ready");
+      callback(null, image);
+    });
+  }
+}
 
 function rmDir(dirPath, removeSelf) {
   if (removeSelf === undefined)

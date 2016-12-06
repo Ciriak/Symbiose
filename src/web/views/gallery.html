@@ -9,7 +9,7 @@
       ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
       ng-click="gallery.preview.set(wallpaper)">
 
-      <img class="source-icon" ng-src="{{wallpaper.source.icon}}" ng-click="gallery.setWallpaper(wallpaper);">
+      <img class="source-icon" ng-src="{{wallpaper.source.icon}}" ng-click="gallery.setWallpaper([wallpaper, wallpaper, wallpaper]);">
 
     </div>
   </div>
