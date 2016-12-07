@@ -1,6 +1,6 @@
-app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $location, ipcRenderer) {
+app.controller('exploreCtrl', function($scope, $rootScope, $http, $translate, $location, ipcRenderer) {
 
-	$scope.gallery = {
+	$scope.explore = {
 		source: null,
 		loading: true,
 		search: "",
@@ -9,22 +9,22 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 			show: false,
 			set: function(wallpaper){
 				console.log(wallpaper);
-				$scope.gallery.preview.wallpaper = wallpaper;
-				$scope.gallery.preview.show = true;
+				$scope.explore.preview.wallpaper = wallpaper;
+				$scope.explore.preview.show = true;
 				if(!$scope.$$phase) {
 		      $scope.$apply();
 		    }
 			},
 			close: function(){
-				$scope.gallery.preview.wallpaper = null;
-				$scope.gallery.preview.show = false;
+				$scope.explore.preview.wallpaper = null;
+				$scope.explore.preview.show = false;
 			}
 		},
 		retreive: function(uriType){
 			this.wallpapers = [];
 			this.loading = true;
 			//tell the server to send Data
-			ipcRenderer.send("retreiveData", uriType, $scope.gallery.search);
+			ipcRenderer.send("retreiveData", uriType, $scope.explore.search);
 		},
 		setWallpaper: function(wallpapers){
 			ipcRenderer.sendSync("setWallpaper", wallpapers);
@@ -32,14 +32,14 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 	};
 
 	ipcRenderer.on("wallpaper", function(event, wallpaper){
-		$scope.gallery.wallpapers.push(wallpaper);
+		$scope.explore.wallpapers.push(wallpaper);
 		if(!$scope.$$phase) {
 			$scope.$apply();
 		}
 	});
 
 	ipcRenderer.on("queryEnd", function(event){
-		$scope.gallery.loading = false;
+		$scope.explore.loading = false;
 	});
 
 	$scope.random = function() {
@@ -47,6 +47,6 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
   };
 
 	//retreive data
-	$scope.gallery.retreive();
+	$scope.explore.retreive();
 
 });

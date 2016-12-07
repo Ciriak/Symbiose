@@ -1,0 +1,30 @@
+<div class="explore" ng-controller="exploreCtrl">
+  <div class="preview" ng-click="explore.preview.close()" ng-show="explore.preview.show" ng-style="{'background-image': 'url('+explore.preview.wallpaper.localUri+')'}"></div>
+
+  <span ng-show="explore.loading">LOADING ...</span>
+
+  <div class="explore-wallpapers">
+    <div class="wallpaper"
+      ng-repeat="wallpaper in explore.wallpapers track by $index"
+      ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
+      ng-click="explore.preview.set(wallpaper)">
+
+      <img class="source-icon" ng-src="{{wallpaper.source.icon}}" ng-click="explore.setWallpaper([wallpaper, wallpaper, wallpaper]);">
+
+    </div>
+  </div>
+  <ul class="explore-menu">
+    <li>
+      <i class="mdi mdi-magnify"></i>
+      <form ng-submit="explore.retreive('search')">
+        <input type="text" ng-model="explore.search">
+      </form>
+
+    </li>
+    <li ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}">
+      <img ng-src="{{source.icon}}">
+      <p>{{source.label}}</p>
+    </li>
+  </ul>
+
+</div>
