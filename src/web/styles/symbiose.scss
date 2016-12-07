@@ -87,7 +87,7 @@ body{
   }
 }
 
-.gallery{
+.explore{
   .preview{
     position: fixed;
     z-index: 10;
@@ -97,7 +97,7 @@ body{
     height: 100%;
     background-size: cover;
   }
-  .gallery-wallpapers{
+  .explore-wallpapers{
     width: 80%;
     .wallpaper{
       width: 20%;
@@ -110,7 +110,7 @@ body{
       }
     }
   }
-  .gallery-menu{
+  .explore-menu{
     margin: 0;
     padding: 20px 10px 10px 10px;
     position: fixed;
