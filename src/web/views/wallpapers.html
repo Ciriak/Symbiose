@@ -1,9 +1,18 @@
 <div ng-controller="wallpaperCtrl">
   <div class="screens-carrousel">
-    <div class="screen previous">prev</div>
     <div class="screen" ng-repeat="screen in screens.displays" ng-attr-id="screen-{{screen.id}}" ng-style="{'background-image':'url('+screen.wallpaper.uri+')', 'width':screen.container.width+'%'}">
       {{screen.size.width}}X{{screen.size.height}}
     </div>
-    <div class="screen next" ng-style="{'height':screens.dimensions.maxHeight+'px'}">next</div>
+  </div>
+  <div class="gallery">
+    <div class="gallery-wallpapers">
+      <div class="wallpaper"
+        ng-repeat="wallpaper in gallery.wallpapers track by $index"
+        ng-style="{'background-image': 'url('+wallpaper.localUri+')'}">
+
+        <img class="source-icon" ng-src="{{wallpaper.source.icon}}">
+
+      </div>
+    </div>
   </div>
 </div>

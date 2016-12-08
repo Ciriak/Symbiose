@@ -1,4 +1,4 @@
-app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, $location, screen) {
+app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, $location, screen, ipcRenderer) {
 	$scope.screens = {};
 	$scope.screens.displays = screen.getAllDisplays();
 	$scope.screens.dimensions = {
@@ -6,6 +6,11 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 		maxHeight: 0,
 		maxHeightItemIndex: null
 	};
+
+	$scope.gallery = {
+		wallpapers: []
+	};
+
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 
 		$scope.screens.dimensions.totalWidth += $scope.screens.displays[i].size.width;
@@ -34,6 +39,13 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 
 	$(document).ready(function(){
 		genSizes();
+	});
+
+	ipcRenderer.on("wallpaper", function(event, wallpaper){
+		$scope.gallery.wallpapers.push(wallpaper);
+		if(!$scope.$$phase) {
+			$scope.$apply();
+		}
 	});
 
 	function genSizes(){

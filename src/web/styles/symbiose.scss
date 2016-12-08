@@ -62,27 +62,20 @@ body{
   overflow-x: hidden;
   position: absolute;
   .screens-carrousel{
+    perspective: 25vw;
     width: 80%;
     margin: auto;
-    margin-top: 20vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
     text-align: center;
     .screen{
+      //transform: rotateY( 5deg );
       margin: auto;
       display: inline-block;
       background-color: #cccccc;
       background-size: cover;
       border: 2px #1E2124 solid;
       border-radius: 3px;
-    }
-    .screen.previous{
-      position: absolute;
-      width: 20%;
-      margin-left: calc(-20% - 4px);
-    }
-    .screen.next{
-      position: absolute;
-      width: 20%;
-      margin-right: -10%;
     }
   }
 }
@@ -126,6 +119,21 @@ body{
       img{
         display: inline-block;
         margin-right: 10px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+.gallery{
+  .gallery-wallpapers{
+    .wallpaper{
+      width: 20%;
+      height: 15vh;
+      background-size: cover;
+      display: inline-block;
+      .source-icon{
         width: 24px;
         height: 24px;
       }
