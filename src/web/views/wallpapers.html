@@ -7,7 +7,7 @@
   <div class="gallery">
     <div class="gallery-wallpapers">
       <div class="wallpaper"
-        ng-repeat="wallpaper in gallery.wallpapers track by $index"
+        ng-repeat="wallpaper in settings.gallery.wallpapers track by $index"
         ng-style="{'background-image': 'url('+wallpaper.localUri+')'}">
 
         <img class="source-icon" ng-src="{{wallpaper.source.icon}}">

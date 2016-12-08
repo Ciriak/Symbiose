@@ -17,11 +17,14 @@ var mainWindow;
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
-//local settings file
+//local settings file (default)
 var settings = {
   local: {
     localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
     remoteSettingsFile: null
+  },
+  gallery: {
+    wallpapers: []
   }
 };
 var util = require('util');
@@ -54,8 +57,8 @@ let options = {
 const updater = new GhReleases(options);
 
 // create the "temp" folder
-var tempDir = app.getPath("temp")+"/symbiose";
-var localDir = app.getPath("appData")+"/symbiose";
+var tempDir = app.getPath("temp")+"/Symbiose";
+var localDir = app.getPath("appData")+"/Symbiose";
 if (!fs.existsSync(tempDir)){
   fs.mkdirSync(tempDir);
 }
@@ -267,6 +270,7 @@ ipc.on('saveSettings', function(event, data){
 
 ipc.on('setFullScreen', function(event, setFullScreen){
   mainWindow.setFullScreen(setFullScreen);
+  mainWindow.setAlwaysOnTop(setFullScreen);
 });
 
 

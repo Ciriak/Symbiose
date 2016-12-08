@@ -1,7 +1,4 @@
 app.controller('settingsCtrl', function($scope, $rootScope, $http, $translate, $location, app, ipcRenderer, dialog) {
-  $rootScope.settings.save = function(){
-    ipcRenderer.send('saveSettings', this.values);
-  };
 
   $rootScope.settings.settingsFile = {
     valid: false,
@@ -22,7 +19,6 @@ app.controller('settingsCtrl', function($scope, $rootScope, $http, $translate, $
   		}
     },
     askCreate: function(path){
-      console.log(path);
       var resp = dialog.showMessageBox({
         type: "question",
         message: "Lorem ipsum ?",

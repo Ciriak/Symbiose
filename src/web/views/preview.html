@@ -1,7 +1,22 @@
+<div class="wallpaper-image"
+  ng-click="preview.close()"
+  ng-style="{'background-image': 'url('+preview.wallpaper.localUri+')'}">
+</div>
 <div class="wallpaper-info">
   <span class="title">{{preview.wallpaper.title}}</span>
   <div class="author">
     By {{preview.wallpaper.author}}
-    <img class="source-icon" ng-src="{{wallpaper.source.icon}}">
+    <img class="source-icon" ng-src="{{preview.wallpaper.source.icon}}">
   </div>
+</div>
+
+<div class="add-button" ng-click="settings.saveWallpaper(preview.wallpaper);">
+  <i class="mdi mdi-image-area-close"></i>
+</div>
+
+<div class="description">
+  <div class="description-icon" ng-if="preview.wallpaper.description">
+    <i class="mdi mdi-message-reply-text"></i>
+  </div>
+  <div class="description-text">{{preview.wallpaper.description}}</div>
 </div>

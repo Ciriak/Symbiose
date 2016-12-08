@@ -18,7 +18,7 @@
     <div class="content" ng-include="'views/'+page+'.html'"></div>
 
     <!-- fullscreen preview -->
-    <div class="preview" ng-click="preview.close()" ng-show="preview.wallpaper" ng-style="{'background-image': 'url('+preview.wallpaper.localUri+')'}" ng-include="'views/preview.html'"></div>
+    <div class="preview" ng-show="preview.wallpaper" ng-include="'views/preview.html'"></div>
 
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
