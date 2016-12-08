@@ -1,13 +1,11 @@
 <div class="explore" ng-controller="exploreCtrl">
-  <div class="preview" ng-click="explore.preview.close()" ng-show="explore.preview.show" ng-style="{'background-image': 'url('+explore.preview.wallpaper.localUri+')'}"></div>
-
   <span ng-show="explore.loading">LOADING ...</span>
 
   <div class="explore-wallpapers">
     <div class="wallpaper"
       ng-repeat="wallpaper in explore.wallpapers track by $index"
       ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
-      ng-click="explore.preview.set(wallpaper)">
+      ng-click="preview.set(wallpaper)">
 
       <img class="source-icon" ng-src="{{wallpaper.source.icon}}" ng-click="explore.setWallpaper([wallpaper, wallpaper, wallpaper]);">
 

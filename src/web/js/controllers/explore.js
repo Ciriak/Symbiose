@@ -5,21 +5,6 @@ app.controller('exploreCtrl', function($scope, $rootScope, $http, $translate, $l
 		loading: true,
 		search: "",
 		wallpapers: [],
-		preview: {
-			show: false,
-			set: function(wallpaper){
-				console.log(wallpaper);
-				$scope.explore.preview.wallpaper = wallpaper;
-				$scope.explore.preview.show = true;
-				if(!$scope.$$phase) {
-		      $scope.$apply();
-		    }
-			},
-			close: function(){
-				$scope.explore.preview.wallpaper = null;
-				$scope.explore.preview.show = false;
-			}
-		},
 		retreive: function(uriType){
 			this.wallpapers = [];
 			this.loading = true;

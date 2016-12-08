@@ -13,7 +13,7 @@ const exeName = "Symbiose.exe";
 const nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
-let mainWindow
+var mainWindow;
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
@@ -178,7 +178,7 @@ app.on('activate', function () {
 
 //open the tagifier main process
 function openApp(){
-  var mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     show: false,
     center: true,
     resizable : true,
@@ -263,6 +263,10 @@ ipc.on('saveSettings', function(event, data){
       console.log("Settings saved locally");
     }
   });
+});
+
+ipc.on('setFullScreen', function(event, setFullScreen){
+  mainWindow.setFullScreen(setFullScreen);
 });
 
 

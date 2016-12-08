@@ -21,7 +21,7 @@ app.filter("trustUrl", ['$sce', function ($sce) { //used by media player
     };
 }]);
 
-app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$window', '$location', 'ipcRenderer', function($scope, $http, $rootScope, $translate, $window, $location, ipcRenderer)
+app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$window', '$location', 'ipcRenderer', 'BrowserWindow', function($scope, $http, $rootScope, $translate, $window, $location, ipcRenderer, BrowserWindow)
 {
   $scope.page = "wallpapers";   //default page
 
@@ -86,7 +86,6 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     		}
       },
       askCreate: function(path){
-        console.log(path);
         var resp = dialog.showMessageBox({
           type: "question",
           message: "Lorem ipsum ?",
@@ -102,6 +101,22 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
       }
     }
   };
+
+  //full screen image preview
+  $rootScope.preview = {
+    wallpaper: null,
+    set: function(wallpaper){
+      $rootScope.preview.wallpaper = wallpaper;
+      ipcRenderer.send("setFullScreen", true);
+      if(!$scope.$$phase) {
+        $scope.$apply();
+      }
+    },
+    close: function(){
+      $rootScope.preview.wallpaper = null;
+      ipcRenderer.send("setFullScreen", false);
+    }
+  },
 
   //retreive the settings
   $rootScope.settings = {};

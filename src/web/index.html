@@ -17,6 +17,9 @@
     <!-- main nav -->
     <div class="content" ng-include="'views/'+page+'.html'"></div>
 
+    <!-- fullscreen preview -->
+    <div class="preview" ng-click="preview.close()" ng-show="preview.wallpaper" ng-style="{'background-image': 'url('+preview.wallpaper.localUri+')'}" ng-include="'views/preview.html'"></div>
+
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
     <script src="dep/angular/angular.min.js"></script>
