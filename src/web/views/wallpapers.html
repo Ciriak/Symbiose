@@ -6,12 +6,12 @@
   </div>
   <div class="gallery">
     <div class="gallery-wallpapers">
-      <div class="wallpaper"
-        ng-repeat="wallpaper in settings.gallery.wallpapers track by $index"
-        ng-style="{'background-image': 'url('+wallpaper.localUri+')'}">
-
-        <img class="source-icon" ng-src="{{wallpaper.source.icon}}">
-
+      <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index">
+        <div class="wallpaper"
+          ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
+          ng-click="preview.set(wallpaper)">
+        </div>
+        <i class="mdi mdi-close" ng-click="settings.removeWallpaper(wallpaper);"></i>
       </div>
     </div>
   </div>

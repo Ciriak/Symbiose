@@ -57,9 +57,19 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     }
   });
 
+  ipcRenderer.on("wallpaperSaved", function(event, wallpaper){
+    if(!wallpaper){
+      return;
+    }
+    $rootScope.settings.downloadingWallpapers[wallpaper.id].downloading = false;
+    $rootScope.settings.downloadingWallpapers[wallpaper.id].added = true;
+    $rootScope.settings.values.gallery.wallpapers.push(wallpaper);
+    $rootScope.settings.save();
+  });
+
   $rootScope.installUpdate = function(){
     ipcRenderer.send("installUpdate");
-  }
+  };
 
   $rootScope.sources = ipcRenderer.sendSync('sources');
 
@@ -81,13 +91,18 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
 
   $rootScope.settings = {
     values: null,
+    downloadingWallpapers: {},
     saveWallpaper: function(wallpaper){
-      console.log("Wallpaper saved to the gallery");
+
+      this.downloadingWallpapers[wallpaper.id] = {
+        downloading: true,
+        added: false
+      };
+
       if(!$rootScope.settings.values.gallery.wallpapers){
         $rootScope.settings.values.gallery.wallpapers = [];
       }
-      $rootScope.settings.values.gallery.wallpapers.push(wallpaper);
-      $rootScope.settings.save();
+      ipcRenderer.send('saveWallpaper', wallpaper);
     },
     save: function(){
       ipcRenderer.send('saveSettings', this.values);

@@ -21,7 +21,9 @@ var sources = require('./sources.json');
 var settings = {
   local: {
     localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
-    remoteSettingsFile: null
+    remoteSettingsFile: null,
+    tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
+    localDir: app.getPath("appData")+"\\"+pjson.name+"\\"
   },
   gallery: {
     wallpapers: []
@@ -57,8 +59,8 @@ let options = {
 const updater = new GhReleases(options);
 
 // create the "temp" folder
-var tempDir = app.getPath("temp")+"/Symbiose";
-var localDir = app.getPath("appData")+"/Symbiose";
+var tempDir = app.getPath("temp")+"\\"+pjson.name+"\\";
+var localDir = app.getPath("appData")+"\\"+pjson.name+"\\";
 if (!fs.existsSync(tempDir)){
   fs.mkdirSync(tempDir);
 }
@@ -116,8 +118,8 @@ function handleSquirrelEvent() {
         for (var i = 0; i < lnkPath.length; i++) {
 
           //remove shortcut if exist
-          if(ofs.existsSync(lnkPath[i])){
-            ofs.unlinkSync(lnkPath[i]);
+          if(fs.existsSync(lnkPath[i])){
+            fs.unlinkSync(lnkPath[i]);
           }
 
           //create new shortcut
@@ -138,9 +140,9 @@ function handleSquirrelEvent() {
       // Remove desktop and start menu shortcuts
       if(process.platform === 'win32') {
         for (var i = 0; i < lnkPath.length; i++) {
-          ofs.access(lnkPath[i], ofs.F_OK, function(err) {
+          fs.access(lnkPath[i], fs.F_OK, function(err) {
               if (!err) {
-                ofs.unlink(lnkPath[i]);
+                fs.unlink(lnkPath[i]);
               }
           });
         }
@@ -303,6 +305,22 @@ ipc.on('setWallpaper', function(event, wallpapers){
   });
 });
 
+//save a wallpaper to the user gallery
+ipc.on('saveWallpaper', function(event, wallpaper){
+  var lUri = localDir+"/wallpapers/"+wallpaper.id+"."+wallpaper.type;
+  fs.copy(wallpaper.localUri, lUri, function(err){
+    if(err){
+      console.log(err)
+      event.returnValue = false;
+      return;
+    }
+    console.log("Wallpaper downloaded");
+    wallpaper.localUri = url.parse(lUri).href;
+    event.sender.send('wallpaperSaved', wallpaper);
+  });
+});
+
+
 function requestData(event, elems, search, uriType, source, callback){
   //Set base if uritype is not defined
   if(!uriType){
@@ -403,7 +421,7 @@ function processWallpaper(event, wallpaper, callback){
     url : wallpaper.url,
     encoding : null
   }, function(error, response, body) {
-    if (error || response.statusCode !== 200 || body === undefined) {
+    if (error || response.statusCode !== 200 || body === undefined || body === "") {
       console.log(error);
       callback("REQUEST_ERROR" , wallpaper);
     }
@@ -595,18 +613,18 @@ var createWallpaperFrame = function(screen, wallpaper, callback){
 function rmDir(dirPath, removeSelf) {
   if (removeSelf === undefined)
     removeSelf = true;
-  try { var files = ofs.readdirSync(dirPath); }
+  try { var files = fs.readdirSync(dirPath); }
   catch(e) { return; }
   if (files.length > 0)
     for (var i = 0; i < files.length; i++) {
       var filePath = dirPath + '/' + files[i];
-      if (ofs.statSync(filePath).isFile())
+      if (fs.statSync(filePath).isFile())
         fs.remove(filePath);
       else
         rmDir(filePath);
     }
   if (removeSelf)
-    ofs.rmdirSync(dirPath);
+    fs.rmdirSync(dirPath);
 }
 
 rmDir(tempDir, false);
