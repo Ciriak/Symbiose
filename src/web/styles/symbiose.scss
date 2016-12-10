@@ -190,18 +190,31 @@ body{
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.7);
-        .overlay-icon{
+        .fullscreen-icon{
           opacity: 0.6;
           transition-duration: 0.3s;
-          width: 50%;
+          width: 100%;
           height: 100%;
-          float: left;
           text-align: center;
-          margin-top: 6vh;
+          padding-top: 6vh;
           font-size: 1.5rem;
           cursor: pointer;
         }
-        .overlay-icon:hover{
+        .fullscreen-icon:hover{
+          opacity: 1.0;
+        }
+        .save-icon{
+          opacity: 0.6;
+          transition-duration: 0.3s;
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+          padding: 10px;
+          font-size: 1.2rem;
+          cursor: pointer;
+        }
+        .save-icon:hover{
           opacity: 1.0;
         }
       }
@@ -249,14 +262,46 @@ body{
         height: 100%;
         background-size: cover;
       }
-      .mdi{
+      .wallpaper-overlay{
+        opacity: 0;
+        transition-duration: 0.3s;
         z-index: 2;
         position: absolute;
-        bottom: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
         left: 0;
-        padding: 5px;
-        font-size: 1rem;
-        opacity: 0.8;
+        background-color: rgba(0, 0, 0, 0.7);
+        .fullscreen-icon{
+          opacity: 0.6;
+          transition-duration: 0.3s;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          padding-top: 6vh;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+        .fullscreen-icon:hover{
+          opacity: 1.0;
+        }
+        .remove-icon{
+          opacity: 0.6;
+          transition-duration: 0.3s;
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+          padding: 10px;
+          font-size: 1.2rem;
+          cursor: pointer;
+        }
+        .remove-icon:hover{
+          opacity: 1.0;
+        }
+      }
+      .wallpaper-overlay:hover{
+        opacity: 1.0;
       }
     }
   }

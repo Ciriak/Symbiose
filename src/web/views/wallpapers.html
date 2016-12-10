@@ -11,7 +11,14 @@
           ng-style="{'background-image': 'url('+getLocalUri(wallpaper.localUri)+')'}"
           ng-click="preview.set(wallpaper, true)">
         </div>
-        <i class="mdi mdi-close" ng-click="settings.removeWallpaper(wallpaper);"></i>
+        <div class="wallpaper-overlay">
+          <div class="remove-icon" ng-click="settings.removeWallpaper(wallpaper);">
+            <i class="mdi mdi-close"></i>
+          </div>
+          <div class="fullscreen-icon" ng-click="preview.set(wallpaper, true)">
+            <i class="mdi mdi-fullscreen"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
