@@ -330,6 +330,17 @@ ipc.on('saveWallpaper', function(event, wallpaper){
   });
 });
 
+ipc.on('removeWallpaper', function(event, wallpaper){
+  var u = wallpaper.localUri.replace('%localDir%', localDir);
+  fs.remove(url.parse(u).href, function (err) {
+    if (err){
+      console.log(err);
+    }
+    console.log('success!');
+  });
+
+});
+
 
 function requestData(event, elems, search, uriType, source, callback){
   //Set base if uritype is not defined

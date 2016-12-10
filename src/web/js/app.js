@@ -115,6 +115,18 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
       }
       ipcRenderer.send('saveWallpaper', wallpaper);
     },
+    removeWallpaper: function(wallpaper){
+      ipcRenderer.send('removeWallpaper', wallpaper);
+      var i = _.indexOf(this.values.gallery.wallpapers, wallpaper);
+      if(i > -1){
+        this.values.gallery.wallpapers.splice(i, 1);
+        this.save();
+      }
+      else{
+        console.log("Error");
+      }
+
+    },
     save: function(){
       ipcRenderer.send('saveSettings', this.values);
     }
