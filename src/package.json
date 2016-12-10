@@ -33,6 +33,7 @@
     "jimp": "^0.2.27",
     "lodash": "^4.16.4",
     "node-id3": "0.0.4",
+    "node-schedule": "^1.2.0",
     "object-path": "^0.11.3",
     "package-script": "0.0.8",
     "probe-image-size": "^3.0.0",

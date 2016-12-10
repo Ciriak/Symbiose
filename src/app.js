@@ -42,12 +42,15 @@ var fs = require('fs-extra');
 var url = require('url');
 var Jimp = require("jimp");
 var async = require('async');
+var schedule = require('node-schedule');
 //img buffer keys
 var magic = {
     jpg: 'ffd8ffe0',
     png: '89504e47',
     gif: '47494638'
 };
+
+var wallpaperJob;
 
 console.log("Symbiose V."+pjson.version);
 
@@ -197,7 +200,9 @@ function openApp(){
     mainWindow.webContents.session.clearCache(function(){ //clear cache
       mainWindow.show();
       mainWindow.focus();
-      loadSettings();
+      loadSettings(function(err){
+        launchWallpaperJob();
+      });
       checkUpdates();
     });
   });
@@ -488,11 +493,11 @@ function processWallpaper(event, wallpaper, callback){
   });
 }
 
-function loadSettings(){
+function loadSettings(callback){
   //create local settings file if not exist
   fs.ensureFile(settings.local.localSettingsFile, function (err) {
     if(err){
-      console.log(err);
+      return callback(err);
     }
     var sd = fs.readJsonSync(settings.local.localSettingsFile, {throws: false});
     if(sd === null){
@@ -519,9 +524,10 @@ function loadSettings(){
         fs.writeJsonSync(settings.local.localSettingsFile, settings);
         console.log("Remote settings loaded and applied");
       }
-
     }
+    return callback();
   });
+
 }
 
 //generate an unique id for each wallpaper
@@ -534,6 +540,26 @@ function genId(source, wallpaper){
     i++;
   }
   return i+"-"+wallpaper.id;
+}
+
+function launchWallpaperJob(){
+  var screens = electron.screen.getAllDisplays();
+  if(settings.wallpaper.changeOnStartup === true){
+    console.log("Setting wallpaper (on launch)");
+    createWallpaper(settings.gallery.wallpapers, screens, function(){
+      return;
+    });
+  }
+
+  var rule = new schedule.RecurrenceRule();
+  rule.minute = new schedule.Range(0, 59, settings.wallpaper.changeDelay);
+
+  wallpaperJob = schedule.scheduleJob(rule, function(){
+    console.log("Setting wallpaper (timer)");
+    createWallpaper(settings.gallery.wallpapers, screens, function(){
+      //done();
+    });
+  });
 }
 
 function checkUpdates(){
@@ -592,18 +618,20 @@ function createWallpaper(wallpapers, screens, callback){
   }
 
   for (var i = 0; i < screens.length; i++) {
-    stacks.push(createWallpaperFrame(screens[i], wallpapers[i]));
+    var wIndex = Math.floor(Math.random() * wallpapers.length)
+    stacks.push(createWallpaperFrame(screens[i], wallpapers[wIndex]));
   }
 
   async.parallel(stacks, function(err, images) {
     if(err){
       console.log(err);
-      return;
+      return callback(err);
     }
 
     var generated = new Jimp(frame.width, frame.height, function (err, generated) {
       if(err){
         console.log(err);
+        return callback(err);
       }
       for (var i = 0; i < images.length; i++) {
         var x = screens[i].bounds.x+frame.offsetX;
@@ -612,24 +640,30 @@ function createWallpaper(wallpapers, screens, callback){
         generated.composite( images[i], x, y );
       }
       generated.write(localDir+"\\wallpaper.jpg");
-      return callback();
+      nodeWallpaper.set(localDir+"\\wallpaper.jpg", function(){
+        return callback();
+      });
+
     });
 
   });
 }
 
 var createWallpaperFrame = function(screen, wallpaper, callback){
+  var u = wallpaper.localUri.replace('%localDir%', localDir);
+  var r = url.parse(u).href;
   return function(callback){
-    Jimp.read(wallpaper.localUri, function (err, image) {
+    Jimp.read(r, function (err, image) {
       if(err){
-        callback(err, null);
+        console.log(err);
+        return callback(err, null);
       }
       image.cover(screen.size.width, screen.size.height);
       console.log("Frame ready");
-      callback(null, image);
+      return callback(null, image);
     });
-  }
-}
+  };
+};
 
 function rmDir(dirPath, removeSelf) {
   if (removeSelf === undefined)
