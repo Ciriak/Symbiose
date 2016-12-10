@@ -76,7 +76,13 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
   //full screen image preview
   $rootScope.preview = {
     wallpaper: null,
-    set: function(wallpaper){
+    set: function(wallpaper, isLocal){
+
+      //if local wallpaper then convert the uri
+      if(isLocal){
+        wallpaper.localUri = $rootScope.getLocalUri(wallpaper.localUri);
+      }
+
       $rootScope.preview.wallpaper = wallpaper;
       ipcRenderer.send("setFullScreen", true);
       if(!$scope.$$phase) {
@@ -87,6 +93,11 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
       $rootScope.preview.wallpaper = null;
       ipcRenderer.send("setFullScreen", false);
     }
+  };
+
+  $rootScope.getLocalUri = function(uri){
+    var r = ipcRenderer.sendSync("getLocalUri", uri);
+    return r;
   };
 
   $rootScope.settings = {

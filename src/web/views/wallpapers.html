@@ -8,8 +8,8 @@
     <div class="gallery-wallpapers">
       <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index">
         <div class="wallpaper"
-          ng-style="{'background-image': 'url('+wallpaper.localUri+')'}"
-          ng-click="preview.set(wallpaper)">
+          ng-style="{'background-image': 'url('+getLocalUri(wallpaper.localUri)+')'}"
+          ng-click="preview.set(wallpaper, true)">
         </div>
         <i class="mdi mdi-close" ng-click="settings.removeWallpaper(wallpaper);"></i>
       </div>

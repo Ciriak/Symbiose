@@ -223,6 +223,13 @@ ipc.on('exist', function(event, path) {
 
 });
 
+//return the converted localUri to the client
+ipc.on('getLocalUri', function(event, uri){
+  var u = uri.replace('%localDir%', localDir);
+  var r = url.parse(u).href;
+  event.returnValue = r;
+});
+
 ipc.on('getJson', function(event, path) {
   fs.readJson(path, function (err, result) {
     if(err){
@@ -307,14 +314,17 @@ ipc.on('setWallpaper', function(event, wallpapers){
 
 //save a wallpaper to the user gallery
 ipc.on('saveWallpaper', function(event, wallpaper){
-  var lUri = localDir+"/wallpapers/"+wallpaper.id+"."+wallpaper.type;
-  fs.copy(wallpaper.localUri, lUri, function(err){
+  var lUri = "%localDir%/wallpapers/"+wallpaper.id+"."+wallpaper.type;
+  var u = lUri.replace('%localDir%', localDir);
+
+  fs.copy(wallpaper.localUri, url.parse(u).href, function(err){
     if(err){
-      console.log(err)
+      console.log(err);
       event.returnValue = false;
       return;
     }
     console.log("Wallpaper downloaded");
+
     wallpaper.localUri = url.parse(lUri).href;
     event.sender.send('wallpaperSaved', wallpaper);
   });
