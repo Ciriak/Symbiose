@@ -4,6 +4,13 @@
       {{screen.size.width}}X{{screen.size.height}}
     </div>
   </div>
+  <div class="playlist">
+    <ul class="playlist-items" ng-model="settings.values.gallery.wallpapers" ui-sortable>
+      <li ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index">
+        {{wallpaper.localUri}}
+      </li>
+    </ul>
+  </div>
   <div class="gallery">
     <div class="gallery-wallpapers">
       <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index">
