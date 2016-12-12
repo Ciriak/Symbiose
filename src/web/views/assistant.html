@@ -1,0 +1,16 @@
+<div class="assistant" ng-controller="assistantCtrl">
+  <div class="assistant-step">
+    <h1>Let's Begin !</h1>
+    <p>We are going to configure Symbiose, it should take around 30 sec</p>
+    <button>GO</button>
+  </div>
+
+  <div class="assistant-step">
+    <h1>Select your wallpapers folder</h1>
+    <p>Lorem ipsum</p>
+    <input type="text" ng-model="settings.values.local.remotePath" ng-click="settings.settingsFile.select()">
+    <i ng-if="settings.settingsFile.valid" class="mdi mdi-check"></i>
+    <i ng-if="!settings.settingsFile.valid" class="mdi mdi-close"></i>
+  </div>
+
+</div>

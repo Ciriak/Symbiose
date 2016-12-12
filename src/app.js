@@ -21,7 +21,7 @@ var sources = require('./sources.json');
 var settings = {
   local: {
     localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
-    remoteSettingsFile: null,
+    remotePath: null,
     tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
     localDir: app.getPath("appData")+"\\"+pjson.name+"\\"
   },
@@ -200,7 +200,7 @@ function openApp(){
     mainWindow.webContents.session.clearCache(function(){ //clear cache
       mainWindow.show();
       mainWindow.focus();
-      loadSettings(function(err){
+      loadSettings(function(){
         launchWallpaperJob();
       });
       checkUpdates();
@@ -263,14 +263,14 @@ ipc.on('saveSettings', function(event, data){
     if(err){
       console.log(err);
     }
-    if(settings.local.remoteSettingsFile){
+    if(settings.local.remotePath){
       var remoteData = {};
       for (var prop in data) {
         if(prop !== "local"){
           remoteData[prop] = data[prop];
         }
       }
-      fs.writeJson(settings.local.remoteSettingsFile, remoteData, function (err) {
+      fs.writeJson(settings.local.remotePath, remoteData, function (err) {
         event.sender.send('settingsSaved');
         console.log("Settings saved remotely");
       });
@@ -509,10 +509,10 @@ function loadSettings(callback){
       settings = sd;
     }
     //if remoteSettings file is available
-    if(settings.local.remoteSettingsFile){
+    if(settings.local.remotePath){
       console.log("remoteSettings file available");
       // read the remote file and override params
-      sd = fs.readJsonSync(settings.local.remoteSettingsFile, {throws: false});
+      sd = fs.readJsonSync(settings.local.remotePath, {throws: false});
       if(sd !== null){
         for (var param in sd) {
           //ignore local params
@@ -523,8 +523,13 @@ function loadSettings(callback){
         }
         fs.writeJsonSync(settings.local.localSettingsFile, settings);
         console.log("Remote settings loaded and applied");
+        return callback();
       }
     }
+
+    //if no remote file defined then enbale the assistant
+    settings.enableAssistant = true;
+    fs.writeJsonSync(settings.local.localSettingsFile, settings);
     return callback();
   });
 
@@ -544,6 +549,9 @@ function genId(source, wallpaper){
 
 function launchWallpaperJob(){
   var screens = electron.screen.getAllDisplays();
+  if(!settings.wallpaper){
+    return;
+  }
   if(settings.wallpaper.changeOnStartup === true){
     console.log("Setting wallpaper (on launch)");
     createWallpaper(settings.gallery.wallpapers, screens, function(){

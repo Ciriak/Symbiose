@@ -13,7 +13,7 @@
   <body>
 
     <!-- sidebar -->
-    <div ng-include="'views/sidebar.html'"></div>
+    <div ng-include="'views/sidebar.html'" ng-hide="settings.values.enableAssistant === true"></div>
     <!-- main nav -->
     <div class="content" ng-include="'views/'+page+'.html'"></div>
 
@@ -34,13 +34,13 @@
     <script src="dep/object-path/index.js"></script>
     <script src="js/symbiose.js"></script>
     <script>
-	document.addEventListener("keydown", function (e) {
-		if (e.which === 123) {
-			$rootScope.remote.getCurrentWindow().toggleDevTools();
-		} else if (e.which === 116) {
-			location.reload();
-		}
-	});
-</script>
+    	document.addEventListener("keydown", function (e) {
+    		if (e.which === 123) {
+    			$rootScope.remote.getCurrentWindow().toggleDevTools();
+    		} else if (e.which === 116) {
+    			location.reload();
+    		}
+    	});
+    </script>
   </body>
 </html>
