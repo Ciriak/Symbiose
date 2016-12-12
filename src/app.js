@@ -1,16 +1,16 @@
-const electron = require('electron');
-const {app} = require('electron');
-const Menu = electron.Menu;
-const BrowserWindow = electron.BrowserWindow;
-const GhReleases = require('electron-gh-releases');
-const ipc = electron.ipcMain;
-const ChildProcess = require('child_process');
-const path = require('path');
-const appFolder = path.resolve(process.execPath, '..');
-const rootAtomFolder = path.resolve(appFolder, '..');
-const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-const exeName = "Symbiose.exe";
-const nodeWallpaper = require('wallpaper');
+var electron = require('electron');
+var {app} = require('electron');
+var Menu = electron.Menu;
+var BrowserWindow = electron.BrowserWindow;
+var GhReleases = require('electron-gh-releases');
+var ipc = electron.ipcMain;
+var ChildProcess = require('child_process');
+var path = require('path');
+var appFolder = path.resolve(process.execPath, '..');
+var rootAtomFolder = path.resolve(appFolder, '..');
+var updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+var exeName = "Symbiose.exe";
+var nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 var mainWindow;
@@ -21,12 +21,12 @@ var sources = require('./sources.json');
 var settings = {
   local: {
     localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
-    remotePath: null,
+    syncedPath: null,
     tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
-    localDir: app.getPath("appData")+"\\"+pjson.name+"\\"
-  },
-  gallery: {
-    wallpapers: []
+    localDir: app.getPath("appData")+"\\"+pjson.name+"\\",
+    gallery: {
+      wallpapers: []
+    }
   }
 };
 var util = require('util');
@@ -55,11 +55,11 @@ var wallpaperJob;
 console.log("Symbiose V."+pjson.version);
 
 //Define updater options
-let options = {
+var options = {
   repo: 'Cyriaqu3/Symbiose',
   currentVersion: pjson.version
 }
-const updater = new GhReleases(options);
+var updater = new GhReleases(options);
 
 // create the "temp" folder
 var tempDir = app.getPath("temp")+"\\"+pjson.name+"\\";
@@ -80,7 +80,7 @@ function handleSquirrelEvent() {
     return false;
   }
 
-  const spawn = function(command, args) {
+  var spawn = function(command, args) {
     let spawnedProcess, error;
 
     try {
@@ -90,11 +90,11 @@ function handleSquirrelEvent() {
     return spawnedProcess;
   };
 
-  const spawnUpdate = function(args) {
+  var spawnUpdate = function(args) {
     return spawn(updateDotExe, args);
   };
 
-  const squirrelEvent = process.argv[1];
+  var squirrelEvent = process.argv[1];
 
   var exePath = app.getPath("exe");
   var lnkPath = ["%APPDATA%/Microsoft/Windows/Start Menu/Programs/Symbiose.lnk",
@@ -192,19 +192,37 @@ function openApp(){
     resizable : true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
-  mainWindow.loadURL(`file://${__dirname}/web/index.html`);
+  mainWindow.loadURL('file://${__dirname}/web/index.html');
   //display the main app and close the
-  mainWindow.once('ready-to-show', () => {
+  mainWindow.once('ready-to-show', function(){
     //hide menu bar
     mainWindow.setMenu(null);
-    mainWindow.webContents.session.clearCache(function(){ //clear cache
+     //clear cache
+    mainWindow.webContents.session.clearCache(function(){
       mainWindow.show();
       mainWindow.focus();
-      loadSettings(function(){
-        launchWallpaperJob();
+      initApp(function(){
+        checkUpdates();
       });
-      checkUpdates();
+
     });
+  });
+}
+
+function initApp(callback){
+  checkSettings(function(openAssistant){
+
+    // open the app with the assistant
+    if(openAssistant === true){
+      return callback();
+    }
+
+    //scan the wallpapers then open the app and start wallpaper job
+    checkWallpapers(function(){
+      launchWallpaperJob();
+      return callback();
+    });
+
   });
 }
 
@@ -263,16 +281,16 @@ ipc.on('saveSettings', function(event, data){
     if(err){
       console.log(err);
     }
-    if(settings.local.remotePath){
-      var remoteData = {};
+    if(settings.local.syncedPath){
+      var syncedData = {};
       for (var prop in data) {
         if(prop !== "local"){
-          remoteData[prop] = data[prop];
+          syncedData[prop] = data[prop];
         }
       }
-      fs.writeJson(settings.local.remotePath, remoteData, function (err) {
+      fs.writeJson(settings.local.syncedPath+"\\symbiose.json", syncedData, function (err) {
         event.sender.send('settingsSaved');
-        console.log("Settings saved remotely");
+        console.log("Settings saved syncedly");
       });
     }
     else{
@@ -319,10 +337,9 @@ ipc.on('setWallpaper', function(event, wallpapers){
 
 //save a wallpaper to the user gallery
 ipc.on('saveWallpaper', function(event, wallpaper){
-  var lUri = "%localDir%/wallpapers/"+wallpaper.id+"."+wallpaper.type;
-  var u = lUri.replace('%localDir%', localDir);
+  var lUri = settings.local.syncedPath+"\\"+wallpaper.id+"."+wallpaper.type;
 
-  fs.copy(wallpaper.localUri, url.parse(u).href, function(err){
+  fs.copy(wallpaper.localUri, url.parse(lUri).href, function(err){
     if(err){
       console.log(err);
       event.returnValue = false;
@@ -336,8 +353,7 @@ ipc.on('saveWallpaper', function(event, wallpaper){
 });
 
 ipc.on('removeWallpaper', function(event, wallpaper){
-  var u = wallpaper.localUri.replace('%localDir%', localDir);
-  fs.remove(url.parse(u).href, function (err) {
+  fs.remove(url.parse(wallpaper.localUri).href, function (err) {
     if (err){
       console.log(err);
     }
@@ -493,11 +509,12 @@ function processWallpaper(event, wallpaper, callback){
   });
 }
 
-function loadSettings(callback){
+function checkSettings(callback){
   //create local settings file if not exist
   fs.ensureFile(settings.local.localSettingsFile, function (err) {
     if(err){
-      return callback(err);
+      settings.enableAssistant = true;
+      return callback(true);
     }
     var sd = fs.readJsonSync(settings.local.localSettingsFile, {throws: false});
     if(sd === null){
@@ -508,29 +525,40 @@ function loadSettings(callback){
       console.log("Local settings loaded");
       settings = sd;
     }
-    //if remoteSettings file is available
-    if(settings.local.remotePath){
-      console.log("remoteSettings file available");
-      // read the remote file and override params
-      sd = fs.readJsonSync(settings.local.remotePath, {throws: false});
-      if(sd !== null){
-        for (var param in sd) {
-          //ignore local params
-          if(param === "local"){
-            continue;
-          }
-          settings[param] = sd[param];
-        }
-        fs.writeJsonSync(settings.local.localSettingsFile, settings);
-        console.log("Remote settings loaded and applied");
-        return callback();
-      }
-    }
+    //if syncedSettings file is available
+    if(settings.local.syncedPath){
+      console.log("syncedSettings file available");
+      // read the synced file and override params
+      sd = fs.readJsonSync(settings.local.syncedPath+"\\symbiose.json", {throws: false});
 
-    //if no remote file defined then enbale the assistant
-    settings.enableAssistant = true;
-    fs.writeJsonSync(settings.local.localSettingsFile, settings);
-    return callback();
+      //can't read the defined json file
+      if(!sd || sd === null){
+        console.log("not readable");
+        settings.enableAssistant = true;
+        fs.writeJsonSync(settings.local.localSettingsFile, settings);
+        return callback(true);
+      }
+
+      for (var param in sd) {
+        //ignore local params
+        if(param === "local"){
+          continue;
+        }
+        settings[param] = sd[param];
+      }
+      settings.enableAssistant = false;
+      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      console.log("synced settings loaded and applied");
+      return callback();
+
+    }
+    //json file not defined
+    else{
+      console.log("not defined");
+      settings.enableAssistant = true;
+      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      return callback(true);
+    }
   });
 
 }
@@ -554,7 +582,7 @@ function launchWallpaperJob(){
   }
   if(settings.wallpaper.changeOnStartup === true){
     console.log("Setting wallpaper (on launch)");
-    createWallpaper(settings.gallery.wallpapers, screens, function(){
+    createWallpaper(settings.local.gallery.wallpapers, screens, function(){
       return;
     });
   }
@@ -564,7 +592,7 @@ function launchWallpaperJob(){
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.gallery.wallpapers, screens, function(){
+    createWallpaper(settings.local.gallery.wallpapers, screens, function(){
       //done();
     });
   });

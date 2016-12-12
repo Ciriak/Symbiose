@@ -134,7 +134,6 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
 
   //retreive the settings
   $rootScope.settings.values = ipcRenderer.sendSync('getSettings');
-  console.log($rootScope.settings.values);
   //load the assistant
   if($rootScope.settings.values.enableAssistant === true){
     $scope.setPage('assistant');
