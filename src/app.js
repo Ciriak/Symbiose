@@ -192,20 +192,18 @@ function openApp(){
     resizable : true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
-  mainWindow.loadURL('file://${__dirname}/web/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/web/index.html', {extraHeaders: 'pragma: no-cache\n'});
   //display the main app and close the
   mainWindow.once('ready-to-show', function(){
     //hide menu bar
     mainWindow.setMenu(null);
-     //clear cache
-    mainWindow.webContents.session.clearCache(function(){
-      mainWindow.show();
-      mainWindow.focus();
-      initApp(function(){
-        checkUpdates();
-      });
-
+   //clear cache
+    mainWindow.show();
+    mainWindow.focus();
+    initApp(function(){
+      checkUpdates();
     });
+
   });
 }
 
