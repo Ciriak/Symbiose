@@ -13,7 +13,7 @@
   <body>
 
     <!-- sidebar -->
-    <div ng-include="'views/sidebar.html'" ng-hide="settings.values.enableAssistant === true"></div>
+    <div ng-include="'views/sidebar.html'" ng-hide="settings.values.local.enableAssistant === true"></div>
     <!-- main nav -->
     <div class="content" ng-include="'views/'+page+'.html'"></div>
 

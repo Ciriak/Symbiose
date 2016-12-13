@@ -11,13 +11,13 @@ app.controller('assistantCtrl', function($scope, $rootScope, $http, $translate, 
         var rsf = path[0]+"\\symbiose.json";
         if(ipcRenderer.sendSync("exist", rsf)){
           this.valid = true;
-          $rootScope.settings.values = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.localSettingsFile);
+          $rootScope.settings.values.local = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.localSettingsFile);
           $rootScope.settings.values.local.syncedPath = path[0];
           $rootScope.settings.save();
         }
         else{
           if(ipcRenderer.sendSync("createFile", rsf)){
-            $rootScope.settings.values = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.localSettingsFile);
+            $rootScope.settings.values.local = ipcRenderer.sendSync("getJson", $rootScope.settings.values.local.localSettingsFile);
             $rootScope.settings.values.local.syncedPath = path[0];
             $rootScope.settings.save();
           }

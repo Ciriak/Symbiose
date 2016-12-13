@@ -17,16 +17,17 @@ var mainWindow;
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
-//local settings file (default)
+//Settings file (default)
 var settings = {
   local: {
     localSettingsFile: app.getPath("appData")+"\\"+pjson.name+"\\"+pjson.name+".json",
     syncedPath: null,
     tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
     localDir: app.getPath("appData")+"\\"+pjson.name+"\\",
-    gallery: {
-      wallpapers: []
-    }
+    enableAssistant: true
+  },
+  gallery: {
+    wallpapers: []
   }
 };
 var util = require('util');
@@ -217,13 +218,7 @@ function initApp(callback){
     }
 
     //scan the wallpapers then open the app and start wallpaper job
-    checkWallpapers(function(err, items){
-      if(err){
-        console.log(err);
-      }
-
-      settings.gallery.wallpapers = items;
-
+    checkWallpapers(function(){
       launchWallpaperJob();
       return callback();
     });
@@ -253,7 +248,7 @@ ipc.on('exist', function(event, path) {
 
 //return the converted localUri to the client
 ipc.on('getLocalUri', function(event, uri){
-  var u = uri.replace('%localDir%', localDir);
+  var u = uri.replace('%localDir%', settings.local.syncedPath);
   var r = url.parse(u).href;
   event.returnValue = r;
 });
@@ -282,26 +277,8 @@ ipc.on('createFile', function(event, file, data) {
 
 ipc.on('saveSettings', function(event, data){
   settings = data;
-  fs.writeJson(settings.local.localSettingsFile, data, function(err){
-    if(err){
-      console.log(err);
-    }
-    if(settings.local.syncedPath){
-      var syncedData = {};
-      for (var prop in data) {
-        if(prop !== "local"){
-          syncedData[prop] = data[prop];
-        }
-      }
-      fs.writeJson(settings.local.syncedPath+"\\symbiose.json", syncedData, function (err) {
-        event.sender.send('settingsSaved');
-        console.log("Settings saved syncedly");
-      });
-    }
-    else{
-      event.sender.send('settingsSaved');
-      console.log("Settings saved locally");
-    }
+  saveSettings(settings, function(err){
+    event.sender.send('settingsSaved');
   });
 });
 
@@ -351,14 +328,17 @@ ipc.on('saveWallpaper', function(event, wallpaper){
       return;
     }
     console.log("Wallpaper downloaded");
-
+    lUri = "%localDir%\\"+wallpaper.id+"."+wallpaper.type;
     wallpaper.localUri = url.parse(lUri).href;
     event.sender.send('wallpaperSaved', wallpaper);
   });
 });
 
 ipc.on('removeWallpaper', function(event, wallpaper){
-  fs.remove(url.parse(wallpaper.localUri).href, function (err) {
+  var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
+  var r = url.parse(u).href;
+  console.log(r);
+  fs.remove(r, function (err) {
     if (err){
       console.log(err);
     }
@@ -366,6 +346,30 @@ ipc.on('removeWallpaper', function(event, wallpaper){
   });
 
 });
+
+function saveSettings(settings, callback){
+  fs.writeJson(settings.local.localSettingsFile, settings.local, function(err){
+    if(err){
+      return callback(err);
+    }
+    if(settings.local.syncedPath){
+      var syncedData = {};
+      for (var prop in settings) {
+        if(prop !== "local"){
+          syncedData[prop] = settings[prop];
+        }
+      }
+      fs.writeJson(settings.local.syncedPath+"\\symbiose.json", syncedData, function (err) {
+        console.log("Settings saved syncedly");
+        return callback();
+      });
+    }
+    else{
+      console.log("Local settings saved, synced path not defined !");
+      return callback(null);
+    }
+  });
+}
 
 
 function requestData(event, elems, search, uriType, source, callback){
@@ -511,41 +515,61 @@ function processWallpaper(event, wallpaper, callback){
 }
 
 function checkWallpapers(callback){
-  var items = [];
-  var fileDetails;
-  //retreive the synced json
-  fs.readJson(settings.local.syncedPath+"\\symbiose.json", function (err, rs) {
+  var newWallpapers = [];
+
+
+  //Check if every files referenced in the json are in the folder, else remove it
+  for (var i = 0; i < settings.gallery.wallpapers.length; i++) {
+    var u = url.parse(settings.gallery.wallpapers[i].localUri.replace('%localDir%', settings.local.syncedPath)).href;
+    if (!fs.existsSync(u)){
+      //wallpaper not on disk anymore , removing...
+      settings.gallery.wallpapers.splice(i, 1);
+    }
+  }
+
+  var fileDetails = settings.gallery.wallpapers;
+
+  fs.readdir(settings.local.syncedPath, function(err, items){
     if(err){
-      return callback(err);
+      console.log(err);
+      return;
     }
 
-    fileDetails = rs.gallery.wallpapers;
+    for (var f = 0; f < items.length; f++) {
+      var itemPath = settings.local.syncedPath+"\\"+items[f];
+      if(!fs.lstatSync(itemPath).isFile()){
+        continue;
+      }
 
-    fs.walk(settings.local.syncedPath)
-    .on('data', function (item) {
-      //stop if not a file
-      if(!fs.lstatSync(item.path).isFile()){
-        return;
-      }
-      var data = readChunk.sync(item.path, 0, 10);
+      var data = readChunk.sync(itemPath, 0, 10);
       //check if file is a valid image
-      if(isImage(data)){
-        //check if the file is stored inside the synced json and associate data if needed
-        var index = _.findIndex(fileDetails, function(o) { return o.id == path.parse(item.path).name; });
-        if(index > -1){
-          items.push(fileDetails[index]);
-        }
-        else{
-          items.push({
-            "id": path.parse(item.path).name,
-            "localUri": item.path
-          });
-        }
+      if(!isImage(data)){
+        continue;
       }
-    })
-    .on('end', function () {
+
+      //check if the file is stored inside the synced json and associate data if needed
+      // substring = remove .jpg / .png etc...
+      var index = _.findIndex(fileDetails, function(o) { return o.id == items[f].substring(0, items[f].length - 4); });
+      if(index > -1){
+        console.log(index);
+        console.log(fileDetails[index]);
+        newWallpapers.push(fileDetails[index]);
+      }
+      else{
+        newWallpapers.push({
+          "id": path.parse(items[f]).name,
+          "localUri": url.parse(itemPath.replace(settings.local.syncedPath, '%localDir%')).href
+        });
+        console.log("New wallpaper discovered");
+        console.log(newWallpapers[newWallpapers.length-1]);
+      }
+    } //end items loop
+
+    //replace with the refreshed value
+    settings.gallery.wallpapers = newWallpapers;
+    saveSettings(settings, function(){
       console.log("done");
-      return callback(null, items);
+      return callback();
     });
 
   });
@@ -555,17 +579,17 @@ function checkSettings(callback){
   //create local settings file if not exist
   fs.ensureFile(settings.local.localSettingsFile, function (err) {
     if(err){
-      settings.enableAssistant = true;
+      settings.local.enableAssistant = true;
       return callback(true);
     }
     var sd = fs.readJsonSync(settings.local.localSettingsFile, {throws: false});
     if(sd === null){
-      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
       console.log("Local settings file created");
     }
     else{
       console.log("Local settings loaded");
-      settings = sd;
+      settings.local = sd;
     }
     //if syncedSettings file is available
     if(settings.local.syncedPath){
@@ -576,8 +600,8 @@ function checkSettings(callback){
       //can't read the defined json file
       if(!sd || sd === null){
         console.log("not readable");
-        settings.enableAssistant = true;
-        fs.writeJsonSync(settings.local.localSettingsFile, settings);
+        settings.local.enableAssistant = true;
+        fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
         return callback(true);
       }
 
@@ -588,8 +612,8 @@ function checkSettings(callback){
         }
         settings[param] = sd[param];
       }
-      settings.enableAssistant = false;
-      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      settings.local.enableAssistant = false;
+      fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
       console.log("synced settings loaded and applied");
       return callback();
 
@@ -597,8 +621,8 @@ function checkSettings(callback){
     //json file not defined
     else{
       console.log("not defined");
-      settings.enableAssistant = true;
-      fs.writeJsonSync(settings.local.localSettingsFile, settings);
+      settings.local.enableAssistant = true;
+      fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
       return callback(true);
     }
   });
@@ -728,7 +752,7 @@ function createWallpaper(wallpapers, screens, callback){
 }
 
 var createWallpaperFrame = function(screen, wallpaper, callback){
-  var u = wallpaper.localUri.replace('%localDir%', localDir);
+  var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
   var r = url.parse(u).href;
   return function(callback){
     Jimp.read(r, function (err, image) {

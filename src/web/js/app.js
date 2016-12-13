@@ -96,6 +96,9 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
   };
 
   $rootScope.getLocalUri = function(uri){
+    if(!uri){
+      return;
+    }
     var r = ipcRenderer.sendSync("getLocalUri", uri);
     return r;
   };
@@ -134,8 +137,9 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
 
   //retreive the settings
   $rootScope.settings.values = ipcRenderer.sendSync('getSettings');
+  console.log($rootScope.settings.values);
   //load the assistant
-  if($rootScope.settings.values.enableAssistant === true){
+  if($rootScope.settings.values.local.enableAssistant === true){
     $scope.setPage('assistant');
   }
   if(!$scope.$$phase) {
