@@ -41,6 +41,7 @@ var probe = require('probe-image-size');
 var fs = require('fs-extra');
 var url = require('url');
 var Jimp = require("jimp");
+var readChunk = require('read-chunk');
 var async = require('async');
 var schedule = require('node-schedule');
 //img buffer keys
@@ -216,7 +217,13 @@ function initApp(callback){
     }
 
     //scan the wallpapers then open the app and start wallpaper job
-    checkWallpapers(function(){
+    checkWallpapers(function(err, items){
+      if(err){
+        console.log(err);
+      }
+
+      settings.gallery.wallpapers = items;
+
       launchWallpaperJob();
       return callback();
     });
@@ -467,12 +474,8 @@ function processWallpaper(event, wallpaper, callback){
     }
 
     //check if the file is an image
-    var bb = body.toString('hex',0,4);
-    if (bb != magic.jpg &&
-        bb != magic.png &&
-        bb != magic.gif) {
-
-        callback("INVALID_FORMAT", wallpaper);
+    if(!isImage(body)){
+      callback("INVALID_FORMAT", wallpaper);
     }
 
     // obtain the size /type of the image
@@ -504,6 +507,47 @@ function processWallpaper(event, wallpaper, callback){
 
       });
     });
+  });
+}
+
+function checkWallpapers(callback){
+  var items = [];
+  var fileDetails;
+  //retreive the synced json
+  fs.readJson(settings.local.syncedPath+"\\symbiose.json", function (err, rs) {
+    if(err){
+      return callback(err);
+    }
+
+    fileDetails = rs.gallery.wallpapers;
+
+    fs.walk(settings.local.syncedPath)
+    .on('data', function (item) {
+      //stop if not a file
+      if(!fs.lstatSync(item.path).isFile()){
+        return;
+      }
+      var data = readChunk.sync(item.path, 0, 10);
+      //check if file is a valid image
+      if(isImage(data)){
+        //check if the file is stored inside the synced json and associate data if needed
+        var index = _.findIndex(fileDetails, function(o) { return o.id == path.parse(item.path).name; });
+        if(index > -1){
+          items.push(fileDetails[index]);
+        }
+        else{
+          items.push({
+            "id": path.parse(item.path).name,
+            "localUri": item.path
+          });
+        }
+      }
+    })
+    .on('end', function () {
+      console.log("done");
+      return callback(null, items);
+    });
+
   });
 }
 
@@ -714,6 +758,16 @@ function rmDir(dirPath, removeSelf) {
     }
   if (removeSelf)
     fs.rmdirSync(dirPath);
+}
+
+function isImage(data){
+  var bb = data.toString('hex',0,4);
+  if (bb === magic.jpg ||
+      bb === magic.png ||
+      bb === magic.gif) {
+        return true;
+  }
+  return false;
 }
 
 rmDir(tempDir, false);
