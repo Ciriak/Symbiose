@@ -60,7 +60,7 @@ console.log("Symbiose V."+pjson.version);
 var options = {
   repo: 'Cyriaqu3/Symbiose',
   currentVersion: pjson.version
-}
+};
 var updater = new GhReleases(options);
 
 // create the "temp" folder
@@ -83,7 +83,7 @@ function handleSquirrelEvent() {
   }
 
   var spawn = function(command, args) {
-    let spawnedProcess, error;
+    var spawnedProcess, error;
 
     try {
       spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
@@ -320,8 +320,9 @@ ipc.on('setWallpaper', function(event, wallpapers){
 //save a wallpaper to the user gallery
 ipc.on('saveWallpaper', function(event, wallpaper){
   var lUri = settings.local.syncedPath+"\\"+wallpaper.id+"."+wallpaper.type;
-
-  fs.copy(wallpaper.localUri, url.parse(lUri).href, function(err){
+  console.log(wallpaper.localUri);
+  console.log(url.parse(lUri).href);
+  fs.copy(wallpaper.localUri, lUri, function(err){
     if(err){
       console.log(err);
       event.returnValue = false;
@@ -329,16 +330,15 @@ ipc.on('saveWallpaper', function(event, wallpaper){
     }
     console.log("Wallpaper downloaded");
     lUri = "%localDir%\\"+wallpaper.id+"."+wallpaper.type;
-    wallpaper.localUri = url.parse(lUri).href;
+    wallpaper.localUri = lUri;
     event.sender.send('wallpaperSaved', wallpaper);
   });
 });
 
 ipc.on('removeWallpaper', function(event, wallpaper){
   var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
-  var r = url.parse(u).href;
-  console.log(r);
-  fs.remove(r, function (err) {
+  console.log(u);
+  fs.remove(u, function (err) {
     if (err){
       console.log(err);
     }
@@ -520,10 +520,10 @@ function checkWallpapers(callback){
 
   //Check if every files referenced in the json are in the folder, else remove it
   for (var i = 0; i < settings.gallery.wallpapers.length; i++) {
-    var u = url.parse(settings.gallery.wallpapers[i].localUri.replace('%localDir%', settings.local.syncedPath)).href;
+    var u = settings.gallery.wallpapers[i].localUri.replace('%localDir%', settings.local.syncedPath);
     if (!fs.existsSync(u)){
-      //wallpaper not on disk anymore , removing...
-      settings.gallery.wallpapers.splice(i, 1);
+      //wallpaper not on disk anymore , we hide him...
+      settings.gallery.wallpapers[i].hidden = true;
     }
   }
 

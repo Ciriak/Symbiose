@@ -10,7 +10,7 @@
   </div>
   <div class="gallery">
     <div class="gallery-wallpapers">
-      <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index">
+      <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index" ng-if="!wallpaper.hidden">
         <div class="wallpaper"
           ng-style="{'background-image': 'url('+ getLocalUri(wallpaper.localUri)+')'}"
           ng-click="preview.set(wallpaper, true)">
