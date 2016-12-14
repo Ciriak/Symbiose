@@ -722,7 +722,7 @@ function createWallpaper(wallpapers, screens, callback){
 
   for (var i = 0; i < screens.length; i++) {
     var wIndex = Math.floor(Math.random() * wallpapers.length)
-    stacks.push(createWallpaperFrame(screens[i], wallpapers[wIndex]));
+    stacks.push(createWallpaperFrame(screens[i], wallpapers[wIndex], i));
   }
 
   async.parallel(stacks, function(err, images) {
@@ -752,7 +752,7 @@ function createWallpaper(wallpapers, screens, callback){
   });
 }
 
-var createWallpaperFrame = function(screen, wallpaper, callback){
+var createWallpaperFrame = function(screen, wallpaper, index, callback){
   var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
   return function(callback){
     Jimp.read(u, function (err, image) {
@@ -762,6 +762,7 @@ var createWallpaperFrame = function(screen, wallpaper, callback){
       }
       image.cover(screen.size.width, screen.size.height);
       console.log("Frame ready");
+      image.write(tempDir+"\\frame_"+index+".jpg");
       return callback(null, image);
     });
   };
