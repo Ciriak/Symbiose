@@ -643,22 +643,23 @@ function genId(source, wallpaper){
 
 function launchWallpaperJob(){
   var screens = electron.screen.getAllDisplays();
-  if(!settings.wallpaper){
+  if(!settings.gallery.wallpapers || settings.gallery.wallpapers.length === 0){
+    console.log("No wallpaper, abording...");
     return;
   }
-  if(settings.wallpaper.changeOnStartup === true){
-    console.log("Setting wallpaper (on launch)");
-    createWallpaper(settings.local.gallery.wallpapers, screens, function(){
+  if(settings.gallery.changeOnStartup === true){
+    console.log("Setting wallpaper (launch)");
+    createWallpaper(settings.gallery.wallpapers, screens, function(){
       return;
     });
   }
 
   var rule = new schedule.RecurrenceRule();
-  rule.minute = new schedule.Range(0, 59, settings.wallpaper.changeDelay);
+  rule.minute = new schedule.Range(0, 59, settings.gallery.changeDelay);
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.local.gallery.wallpapers, screens, function(){
+    createWallpaper(settings.gallery.wallpapers, screens, function(){
       //done();
     });
   });
@@ -741,8 +742,8 @@ function createWallpaper(wallpapers, screens, callback){
         console.log(y);
         generated.composite( images[i], x, y );
       }
-      generated.write(localDir+"\\wallpaper.jpg");
-      nodeWallpaper.set(localDir+"\\wallpaper.jpg", function(){
+      generated.write(tempDir+"\\wallpaper.jpg");
+      nodeWallpaper.set(tempDir+"\\wallpaper.jpg", function(){
         return callback();
       });
 
@@ -753,9 +754,8 @@ function createWallpaper(wallpapers, screens, callback){
 
 var createWallpaperFrame = function(screen, wallpaper, callback){
   var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
-  var r = url.parse(u).href;
   return function(callback){
-    Jimp.read(r, function (err, image) {
+    Jimp.read(u, function (err, image) {
       if(err){
         console.log(err);
         return callback(err, null);
