@@ -1,7 +1,9 @@
-$side-bg: #282B30;
-$side-text: #AEAFB1;
-$content-bg: #2E3136;
-$content-text: #FFFFFF;
+$side-bg: #373E48;
+$side-text: #FFFFFF;
+$content-bg: #292F37;
+$content-text: #ffffff;
+$main-color: #1FD6D0;
+$main-color-dark: #1BB9B4;
 
 body{
   background-color: $side-bg;
@@ -46,7 +48,7 @@ body{
     }
   }
   li.active{
-    border-color:#0DA2FC;
+    border-color: $main-color;
     color: #fff;
   }
 }
@@ -161,8 +163,23 @@ body{
 }
 
 .explore{
+  display: flex;
+  .spinner{
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    top: 0;
+    left: 200px;
+    padding: 10px;
+    z-index: 10;
+    img{
+      width: 100%;
+    }
+  }
   .explore-wallpapers{
-    width: 80%;
+    width: 80vw;
+    height: 100vh;
+    overflow-y: auto;
     .wallpaper-container{
       float: left;
       width: 20%;
@@ -222,22 +239,49 @@ body{
   }
   .explore-menu{
     margin: 0;
-    padding: 20px 10px 10px 10px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    width: 20%;
+    padding: 20px 10px 20px 10px;
     background-color: $side-bg;
     color: $side-text;
+    form{
+      position: relative;
+      input{
+        color: $side-text;
+        border: 1px $main-color-dark solid;
+        padding: 10px;
+        border-radius: 3px;
+        display: inline-block;
+        float: left;
+        width: 90%;
+        background-color: rgba($main-color, 0.1);
+        transition-duration:0.5s;
+      }
+      input:focus{
+        outline: none;
+        border: 1px $main-color solid;
+      }
+      i{
+        position: absolute;
+        right: 10px;
+        padding: 5px;
+        font-size: 1.5rem;
+      }
+    }
     li{
       list-style-type: none;
       width: 100%;
+    }
+    li.source{
+      padding: 10px;
       img{
         display: inline-block;
         margin-right: 10px;
-        width: 24px;
-        height: 24px;
+        width: 14px;
+        height: 14px;
+      }
+      p{
+        display: inline-block;
+        text-align: center;
+        font-size: 1.1rem;
       }
     }
   }

@@ -521,8 +521,11 @@ function checkWallpapers(callback){
   //Check if every files referenced in the json are in the folder, else remove it
   for (var i = 0; i < settings.gallery.wallpapers.length; i++) {
     var u = settings.gallery.wallpapers[i].localUri.replace('%localDir%', settings.local.syncedPath);
-    if (!fs.existsSync(u)){
-      //wallpaper not on disk anymore , we hide him...
+    if (fs.existsSync(u)){
+      settings.gallery.wallpapers[i].hidden = false;
+    }
+    //wallpaper not on disk anymore , we hide him...
+    else{
       settings.gallery.wallpapers[i].hidden = true;
     }
   }

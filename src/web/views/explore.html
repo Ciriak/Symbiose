@@ -1,5 +1,8 @@
 <div class="explore" ng-controller="exploreCtrl">
-  <span ng-show="explore.loading">LOADING ...</span>
+
+  <div class="spinner" ng-show="explore.loading">
+    <img src="img/spinner.svg" alt="Loading">
+  </div>
 
   <div class="explore-wallpapers">
     <div class="wallpaper-container" ng-repeat="wallpaper in explore.wallpapers track by $index">
@@ -17,13 +20,13 @@
   </div>
   <ul class="explore-menu">
     <li>
-      <i class="mdi mdi-magnify"></i>
       <form ng-submit="explore.retreive('search')">
         <input type="text" ng-model="explore.search">
+        <i class="mdi mdi-magnify"></i>
       </form>
 
     </li>
-    <li ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}">
+    <li class="source" ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}">
       <img ng-src="{{source.icon}}">
       <p>{{source.label}}</p>
     </li>
