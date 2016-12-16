@@ -1,12 +1,14 @@
 <div class="settings">
   <h1 ng-click="settings.save()">Settings</h1>
-  <p>Lorem ipsum</p>
-
   <ul>
     <li>
       <h1>Wallpaper Change</h1>
-      <p>Lorem ipsum</p>
-      Every <input type="number" min="1" max="60" ng-model="settings.values.gallery.changeDelay" ng-blur="settings.save()"> Minutes
+      <p>Lorem ipsum danlante ipsem</p>
+      <input type="number" min="1" max="60" ng-model="settings.values.gallery.changeDelay" ng-blur="settings.save()"> Minutes
+    </li>
+    <li>
+      <h1>Change on Startup</h1>
+      <p>Lorem ipsum danlante ipsem</p>
       <input type="checkbox" ng-model="settings.values.gallery.changeOnStartup" ng-blur="settings.save()"> Change on Startup
     </li>
   </ul>

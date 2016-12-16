@@ -18,7 +18,7 @@ body {
     margin: 10px 0px 10px 0px;
     list-style-type: none;
     transition-duration: 0.5s;
-    color: #FFFFFF;
+    color: #808CA4;
     border-left: 3px transparent solid; }
     .sidebar li p {
       display: inline-block;
@@ -38,7 +38,7 @@ body {
 
 .content {
   background-color: #292F37;
-  color: #ffffff;
+  color: #808CA4;
   width: 100%;
   height: 100vh;
   overflow-y: auto;
@@ -279,3 +279,19 @@ body {
       opacity: 1.0; }
   .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay:hover {
     opacity: 1.0; }
+
+.settings {
+  padding: 20px; }
+  .settings h1 {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #808CA4; }
+  .settings ul li {
+    list-style-type: none; }
+    .settings ul li h1 {
+      text-align: left;
+      font-size: 1.1rem;
+      color: #808CA4; }
+    .settings ul li p {
+      font-size: 1rem;
+      color: #808CA4; }

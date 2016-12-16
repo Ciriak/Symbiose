@@ -28,6 +28,9 @@ var settings = {
   },
   gallery: {
     wallpapers: []
+  },
+  explore: {
+    excludedSources: []
   }
 };
 var util = require('util');
@@ -289,7 +292,7 @@ ipc.on('setFullScreen', function(event, setFullScreen){
 
 
 //client ask for wallpapers
-ipc.on('retreiveData', function(event, uriType, search) {
+ipc.on('retreiveData', function(event, queryId, uriType, search, excludedSources) {
 
   var elems = {
     added: [],
@@ -297,14 +300,17 @@ ipc.on('retreiveData', function(event, uriType, search) {
   };
   var sl = [];
   for (var sourceName in sources) {
-    sl.push(sources[sourceName]);
+    //check if source isn't in excluded list
+    if(excludedSources[sourceName]){
+      sl.push(sources[sourceName]);
+    }
   };
 
   sl.forEach(function(source){
-    requestData(event, elems, search, uriType, source, function() {
+    requestData(event, queryId, elems, search, uriType, source, function() {
         console.log("Process done !");
         console.log(elems.added.length + " elements parsed");
-        event.sender.send('queryEnd');
+        event.sender.send('queryEnd', queryId);
     });
   });
 });
@@ -372,7 +378,7 @@ function saveSettings(settings, callback){
 }
 
 
-function requestData(event, elems, search, uriType, source, callback){
+function requestData(event, queryId, elems, search, uriType, source, callback){
   //Set base if uritype is not defined
   if(!uriType){
     uriType = "base";
@@ -392,14 +398,14 @@ function requestData(event, elems, search, uriType, source, callback){
       callback(error, null);
     }
 
-    parseData(event, elems, JSON.parse(body), currentSource, function(data){
+    parseData(event, queryId, elems, JSON.parse(body), currentSource, function(data){
       callback(null, body);
       return;
     });
   });
 }
 
-function parseData(event, elems, data, source, callback){
+function parseData(event, queryId, elems, data, source, callback){
   var required = ["id", "title", "url"];
   var wp = objectPath.get(data, source.api.wallpapers.path);
   elems.expected +=  wp.length;
@@ -416,7 +422,7 @@ function parseData(event, elems, data, source, callback){
           w[prop] = filterUrl(w[prop]);
         }
         //we check if the prop is required
-        if(required.indexOf(prop) > -1 && (!w[prop] || w[prop] == "")){
+        if(required.indexOf(prop) > -1 && (!w[prop] || w[prop] === "")){
           //one required prop is missing, told the script to not add the wallpaper at the end of the process
           console.log("Propertie "+prop+" is missing for wallpaper "+w.id+" , abording...");
           abord = true;
@@ -435,7 +441,7 @@ function parseData(event, elems, data, source, callback){
     if(!abord){
 
       //download the image and add additionals informations
-      processWallpaper(event, w, function(err, wallpaper){
+      processWallpaper(event, queryId, w, function(err, wallpaper){
         elems.added.push(wallpaper.id);
         if(err){
           console.log(err);
@@ -467,7 +473,7 @@ function filterUrl(url){
 }
 
 //download wallpaper and retreive additional informations
-function processWallpaper(event, wallpaper, callback){
+function processWallpaper(event, queryId, wallpaper, callback){
   request({
     url : wallpaper.url,
     encoding : null
@@ -505,7 +511,7 @@ function processWallpaper(event, wallpaper, callback){
         //save the image into the local temp folder
         wallpaper.localUri = uri;
         //send the wallpaper to the rende process
-        event.sender.send('wallpaper', wallpaper);
+        event.sender.send('wallpaper', wallpaper, queryId);
 
         callback(null, wallpaper);
 

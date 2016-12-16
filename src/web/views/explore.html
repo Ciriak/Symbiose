@@ -29,6 +29,7 @@
     <li class="source" ng-repeat="(sourceName, source) in sources" ng-class="{'active' : page == source.name}">
       <img ng-src="{{source.icon}}">
       <p>{{source.label}}</p>
+      <input type="checkbox" ng-checked="!settings.values.explore.excludedSources[sourceName]" ng-blur="settings.save();">
     </li>
   </ul>
 

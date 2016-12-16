@@ -1,7 +1,7 @@
 $side-bg: #373E48;
 $side-text: #FFFFFF;
 $content-bg: #292F37;
-$content-text: #ffffff;
+$content-text: #808CA4;
 $main-color: #1FD6D0;
 $main-color-dark: #1BB9B4;
 
@@ -27,7 +27,7 @@ body{
     margin: 10px 0px 10px 0px;
     list-style-type: none;
     transition-duration: 0.5s;
-    color: $side-text;
+    color: $content-text;
     border-left: 3px transparent solid;
     p{
       display: inline-block;
@@ -343,6 +343,29 @@ body{
       }
       .wallpaper-overlay:hover{
         opacity: 1.0;
+      }
+    }
+  }
+}
+
+.settings{
+  padding: 20px;
+  h1{
+    text-align: center;
+    font-size: 1.3rem;
+    color:$content-text;
+  }
+  ul{
+    li{
+      list-style-type: none;
+      h1{
+        text-align: left;
+        font-size: 1.1rem;
+        color: #808CA4;
+      }
+      p{
+        font-size: 1rem;
+        color: $content-text;
       }
     }
   }
