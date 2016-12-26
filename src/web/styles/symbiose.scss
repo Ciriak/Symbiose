@@ -351,22 +351,32 @@ body{
 .settings{
   padding: 20px;
   h1{
-    text-align: center;
+    text-align: left;
     font-size: 1.3rem;
     color:$content-text;
   }
   ul{
+    padding: 0;
     li{
       list-style-type: none;
       h1{
         text-align: left;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
+        font-weight: bold;
         color: #808CA4;
       }
       p{
+        display: inline-block;
         font-size: 1rem;
         color: $content-text;
       }
     }
+  }
+  input{
+    font-weight: bold;
+    background-color: transparent;
+    border: 0;
+    color: $content-text;
+    max-width: 40px;
   }
 }

@@ -7,6 +7,7 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 		maxHeightItemIndex: null
 	};
 
+	$scope.test = ["aaa", "ssss", "ffff", "xxx"];
 
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 

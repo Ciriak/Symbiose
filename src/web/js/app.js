@@ -2,7 +2,8 @@ var app = angular.module('symbiose', [
 'ui.bootstrap',
 'ngSanitize',
 'pascalprecht.translate',
-'angular-electron'
+'angular-electron',
+'ui.sortable'
     ]);
 
 app.config(['$translateProvider', function($translateProvider) {
