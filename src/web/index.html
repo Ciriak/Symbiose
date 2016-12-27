@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="css/symbiose.css" />
   </head>
   <body>
-
+    <!-- top bar -->
+    <div ng-include="'views/topbar.html'"></div>
     <!-- sidebar -->
     <div ng-include="'views/sidebar.html'" ng-hide="settings.values.local.enableAssistant === true"></div>
     <!-- main nav -->
