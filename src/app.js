@@ -317,10 +317,11 @@ ipc.on('retreiveData', function(event, queryId, uriType, search, excludedSources
 
 ipc.on('setWallpaper', function(event, wallpapers){
   var screens = electron.screen.getAllDisplays();
-  createWallpaper(wallpapers, screens, function(image){
+  /*createWallpaper(wallpapers, screens, function(image){
     console.log("created");
-    event.returnValue = true;
-  });
+
+  });*/
+  event.returnValue = true;
 });
 
 //save a wallpaper to the user gallery
@@ -668,9 +669,9 @@ function launchWallpaperJob(){
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.gallery.wallpapers, screens, function(){
+    /*createWallpaper(settings.gallery.wallpapers, screens, function(){
       //done();
-    });
+    });*/
   });
 }
 
