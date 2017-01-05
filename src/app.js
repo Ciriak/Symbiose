@@ -24,7 +24,8 @@ var settings = {
     syncedPath: null,
     tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
     localDir: app.getPath("appData")+"\\"+pjson.name+"\\",
-    enableAssistant: true
+    enableAssistant: true,
+    managedByOS: true
   },
   gallery: {
     wallpapers: []
@@ -304,7 +305,7 @@ ipc.on('retreiveData', function(event, queryId, uriType, search, excludedSources
     if(excludedSources[sourceName]){
       sl.push(sources[sourceName]);
     }
-  };
+  }
 
   sl.forEach(function(source){
     requestData(event, queryId, elems, search, uriType, source, function() {
@@ -313,6 +314,11 @@ ipc.on('retreiveData', function(event, queryId, uriType, search, excludedSources
         event.sender.send('queryEnd', queryId);
     });
   });
+});
+
+ipc.on('restart', function(event){
+  app.relaunch({args: process.argv.slice(1).concat(['--relaunch'])});
+  app.exit(0);
 });
 
 ipc.on('setWallpaper', function(event, wallpapers){

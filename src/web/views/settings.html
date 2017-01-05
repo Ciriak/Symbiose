@@ -3,10 +3,15 @@
   <ul>
     <li>
       <h1>Wallpapers</h1>
-      <p>Changement toutes les <input type="number" min="1" max="60" ng-model="settings.values.gallery.changeDelay" ng-blur="settings.save()"> minutes</p>
+      <p>Le changement de wallpaper est géré par :</p>
+      <br>
+      <label><input type="radio" name="managed-by-os" ng-model="settings.values.local.managedByOS" data-ng-value="true" ng-change="settings.save()"> Windows</label>
+      <label title="Soon..."><input type="radio" name="managed-by-os" ng-model="settings.values.local.managedByOS" data-ng-value="false" ng-change="settings.save()" disabled> Symbiose</label>
+      <br>
+      <p>Changement toutes les <input type="number" min="1" max="60" ng-model="settings.values.gallery.changeDelay" ng-change="settings.save()"> minutes</p>
     </li>
     <li>
-      <input type="checkbox" ng-model="settings.values.gallery.changeOnStartup" ng-blur="settings.save()">
+      <input type="checkbox" ng-model="settings.values.gallery.changeOnStartup" ng-change="settings.save()">
       <p>Change on startup</p>
     </li>
   </ul>

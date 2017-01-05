@@ -22,22 +22,4 @@
       </div>
     </div>
   </div>
-  <div class="gallery">
-    <div class="gallery-wallpapers" ui-sortable ng-model="settings.values.gallery.wallpapers">
-      <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index" ng-if="!wallpaper.hidden">
-        <div class="wallpaper"
-          ng-style="{'background-image': 'url('+ getLocalUri(wallpaper.localUri)+')'}"
-          ng-click="preview.set(wallpaper, true)">
-        </div>
-        <div class="wallpaper-overlay">
-          <div class="remove-icon" ng-click="settings.removeWallpaper(wallpaper);">
-            <i class="mdi mdi-close"></i>
-          </div>
-          <div class="fullscreen-icon" ng-click="preview.set(wallpaper, true)">
-            <i class="mdi mdi-fullscreen"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -4,15 +4,15 @@
 </div>
 <div class="wallpaper-info">
   <span class="title">{{preview.wallpaper.title}}</span>
-  <div class="author">
+  <div class="author" ng-show="preview.wallpaper.author">
     By {{preview.wallpaper.author}}
     <img class="source-icon" ng-src="{{preview.wallpaper.source.icon}}">
   </div>
 </div>
 
-<div class="add-button" ng-click="settings.saveWallpaper(preview.wallpaper);">
+<!--<div class="add-button" ng-click="settings.saveWallpaper(preview.wallpaper);">
   <i class="mdi mdi-image-area-close"></i>
-</div>
+</div>-->
 
 <div class="description">
   <div class="description-icon" ng-if="preview.wallpaper.description">
