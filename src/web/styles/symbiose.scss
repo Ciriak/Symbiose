@@ -1,9 +1,14 @@
-$side-bg: #373E48;
+$side-bg: #263238;
 $side-text: #FFFFFF;
 $content-bg: #292F37;
 $content-text: #808CA4;
-$main-color: #1FD6D0;
-$main-color-dark: #1BB9B4;
+$main-color: #D500F9;
+$main-color-dark: #AA00FF;
+
+@font-face {
+    font-family: Orbitron;
+    src: url('../fonts/Orbitron-Regular.ttf');
+}
 
 body{
   background-color: $side-bg;
@@ -14,6 +19,54 @@ body{
   display:flex;
 }
 
+.logo{
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-objects{
+  margin-top: calc(50vh - 100px);
+  position: relative;
+}
+
+.square{
+  position: absolute;
+  border: 1px #AA00FF solid;
+  width : 100px;
+  height: 100px;
+  border-radius : 45px;
+}
+
+.l-container{
+  color:#D500F9;
+  position: absolute;
+  width : 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size:3rem;
+}
+
+.first{
+  animation:spin 4s linear infinite;
+}
+.second{
+  animation:spin 3s linear infinite;
+}
+.third{
+  animation:spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+}
 
 .sidebar{
   padding: 0;
