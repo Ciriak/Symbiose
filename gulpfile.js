@@ -60,6 +60,11 @@ gulp.task('copy-dependencies', function() {
   .pipe(gulp.dest('./dist/web/dep/'));
 });
 
+gulp.task('fonts', function() {
+  return gulp.src('./src/web/fonts/**/*')
+  .pipe(gulp.dest('./dist/web/fonts/'));
+});
+
 gulp.task('html', function() {
 return gulp.src('src/web/**/*.html')
     .pipe(plumber())
@@ -162,6 +167,7 @@ gulp.task('prepare-dev-env', gulpsync.sync([
         'html',
         'copy-dependencies',
         'images',
+        'fonts',
         'locales',
         'copy-electron-components',
     ],
