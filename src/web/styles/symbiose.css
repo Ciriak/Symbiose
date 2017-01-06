@@ -3,7 +3,7 @@
   src: url("../fonts/Orbitron-Regular.ttf"); }
 
 body {
-  background-color: #263238;
+  background-color: #212121;
   color: #FFFFFF;
   font-family: Arial;
   margin: 0;
@@ -11,10 +11,7 @@ body {
   display: flex; }
 
 .logo {
-  font-family: 'Orbitron', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
+  font-family: 'Orbitron', sans-serif; }
 
 .logo-objects {
   margin-top: calc(50vh - 100px);
@@ -240,7 +237,7 @@ body {
   .explore .explore-menu {
     margin: 0;
     padding: 20px 10px 20px 10px;
-    background-color: #263238;
+    background-color: #212121;
     color: #FFFFFF; }
     .explore .explore-menu form {
       position: relative; }
@@ -351,3 +348,28 @@ body {
     border: 0;
     color: #808CA4;
     max-width: 40px; }
+
+.assistant {
+  text-align: center; }
+  .assistant .logo {
+    width: 100px;
+    height: 100px;
+    margin: auto; }
+
+button {
+  color: #808CA4;
+  padding: 5px 10px 5px 10px;
+  background-color: transparent;
+  border: 1px #212121 solid;
+  border-radius: 3px;
+  min-width: 100px;
+  transition-duration: 0.3s;
+  outline: none; }
+
+button:hover {
+  color: #fff;
+  border-color: #AA00FF; }
+
+button:active {
+  color: #fff;
+  border-color: #D500F9; }

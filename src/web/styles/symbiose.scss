@@ -1,4 +1,4 @@
-$side-bg: #263238;
+$side-bg: #212121;
 $side-text: #FFFFFF;
 $content-bg: #292F37;
 $content-text: #808CA4;
@@ -21,9 +21,6 @@ body{
 
 .logo{
   font-family: 'Orbitron', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .logo-objects{
@@ -432,4 +429,33 @@ body{
     color: $content-text;
     max-width: 40px;
   }
+}
+.assistant{
+  text-align: center;
+  .logo{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+  }
+}
+
+button{
+  color: $content-text;
+  padding: 5px 10px 5px 10px;
+  background-color: transparent;
+  border: 1px $side-bg solid;
+  border-radius: 3px;
+  min-width: 100px;
+  transition-duration: 0.3s;
+  outline: none;
+}
+
+button:hover{
+  color: #fff;
+  border-color: $main-color-dark;
+}
+
+button:active{
+  color: #fff;
+  border-color: $main-color;
 }
