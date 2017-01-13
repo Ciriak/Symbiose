@@ -4,8 +4,25 @@
       {{screen.size.width}}X{{screen.size.height}}
     </div>
   </div>
+  <div class="slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.slideshow.items">
+    <div class="slideshow-item" ng-repeat="item in settings.values.slideshow.items track by $index">
+
+      <!-- if wallpaper -->
+      <div ng-if="item.localUri" class="wallpaper-container">
+        <div class="wallpaper"
+          ng-style="{'background-image': 'url('+ getLocalUri(item.localUri)+')'}"
+          ng-click="preview.set(item, true)">
+        </div>
+      </div>
+
+      <!-- if source -->
+      <div ng-if="item.api" class="source-container">
+        <span>SOURCE ({{item.label}})</span>
+      </div>
+    </div>
+  </div>
   <div class="gallery">
-    <div class="gallery-wallpapers" ui-sortable ng-model="settings.values.gallery.wallpapers">
+    <div class="gallery-wallpapers slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.gallery.wallpapers">
       <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index" ng-if="!wallpaper.hidden">
         <div class="wallpaper"
           ng-style="{'background-image': 'url('+ getLocalUri(wallpaper.localUri)+')'}"

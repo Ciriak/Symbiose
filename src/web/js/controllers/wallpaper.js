@@ -7,7 +7,17 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 		maxHeightItemIndex: null
 	};
 
-	$scope.test = ["aaa", "ssss", "ffff", "xxx"];
+	$scope.slideshowOpt = {
+    placeholder: "placeholder",
+    connectWith: ".slideshow"
+  };
+
+	$scope.settings.values.slideshow = {
+		items: [
+			$scope.settings.values.gallery.wallpapers[0],
+			$rootScope.sources["artStation"]
+		]
+	};
 
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 

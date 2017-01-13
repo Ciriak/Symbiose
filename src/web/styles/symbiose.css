@@ -274,6 +274,62 @@ body {
         text-align: center;
         font-size: 1.1rem; }
 
+.placeholder {
+  width: 20%;
+  height: 15vh;
+  background-color: rgba(0, 0, 0, 0.5); }
+
+.slideshow {
+  display: flex; }
+  .slideshow .slideshow-item {
+    width: 20%; }
+    .slideshow .slideshow-item .source-container {
+      height: 15vh;
+      position: relative;
+      background-color: rgba(0, 0, 0, 0.5); }
+    .slideshow .slideshow-item .wallpaper-container {
+      height: 15vh;
+      position: relative; }
+      .slideshow .slideshow-item .wallpaper-container .wallpaper {
+        width: 100%;
+        height: 100%;
+        background-size: cover; }
+      .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay {
+        opacity: 0;
+        transition-duration: 0.3s;
+        z-index: 2;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7); }
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .fullscreen-icon {
+          opacity: 0.6;
+          transition-duration: 0.3s;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          padding-top: 6vh;
+          font-size: 1.5rem;
+          cursor: pointer; }
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .fullscreen-icon:hover {
+          opacity: 1.0; }
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .remove-icon {
+          opacity: 0.6;
+          transition-duration: 0.3s;
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+          padding: 10px;
+          font-size: 1.2rem;
+          cursor: pointer; }
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .remove-icon:hover {
+          opacity: 1.0; }
+      .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay:hover {
+        opacity: 1.0; }
+
 .gallery .gallery-wallpapers .wallpaper-container {
   float: left;
   width: 20%;
