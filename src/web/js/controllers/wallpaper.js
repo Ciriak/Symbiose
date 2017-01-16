@@ -8,13 +8,11 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	};
 
 	$scope.slideshowOpt = {
-    placeholder: "placeholder",
-    connectWith: ".slideshow"
+    placeholder: "placeholder"
   };
 
 	$scope.settings.values.slideshow = {
 		items: [
-			$scope.settings.values.gallery.wallpapers[0],
 			$rootScope.sources["artStation"]
 		]
 	};

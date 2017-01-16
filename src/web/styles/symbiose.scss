@@ -344,19 +344,35 @@ body{
 }
 
 .slideshow{
-  display: flex;
+  overflow-x: scroll;
+  overflow-y: auto;
+  white-space: w;
+  height: 100px;
   .slideshow-item{
-    width: 20%;
+    float: left;
+    width: 20vw;
+    position: relative;
+    .progress-container{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      .progress{
+        width: 75%;
+          height: 2px;
+          background-color: $main-color;
+      }
+    }
     .source-container{
       height: 15vh;
       position: relative;
       background-color: rgba(0,0,0,0.5);
     }
     .wallpaper-container{
+      background-color: rgba(0, 0, 0, 0.5);
       height: 15vh;
-      position: relative;
       .wallpaper{
-
         width: 100%;
         height: 100%;
         background-size: cover;
@@ -371,7 +387,7 @@ body{
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.7);
-        .fullscreen-icon{
+        .icon{
           opacity: 0.6;
           transition-duration: 0.3s;
           width: 100%;
@@ -381,7 +397,7 @@ body{
           font-size: 1.5rem;
           cursor: pointer;
         }
-        .fullscreen-icon:hover{
+        .icon:hover{
           opacity: 1.0;
         }
         .remove-icon{
@@ -409,7 +425,6 @@ body{
 .gallery{
   .gallery-wallpapers{
     .wallpaper-container{
-      float: left;
       width: 20%;
       height: 15vh;
       display: inline-block;
@@ -432,7 +447,7 @@ body{
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.7);
-        .fullscreen-icon{
+        .icon{
           opacity: 0.6;
           transition-duration: 0.3s;
           width: 100%;
@@ -442,7 +457,7 @@ body{
           font-size: 1.5rem;
           cursor: pointer;
         }
-        .fullscreen-icon:hover{
+        .icon:hover{
           opacity: 1.0;
         }
         .remove-icon{

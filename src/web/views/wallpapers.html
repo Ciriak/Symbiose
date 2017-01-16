@@ -10,8 +10,7 @@
       <!-- if wallpaper -->
       <div ng-if="item.localUri" class="wallpaper-container">
         <div class="wallpaper"
-          ng-style="{'background-image': 'url('+ getLocalUri(item.localUri)+')'}"
-          ng-click="preview.set(item, true)">
+          ng-style="{'background-image': 'url('+ getLocalUri(item.localUri)+')'}">
         </div>
       </div>
 
@@ -19,10 +18,15 @@
       <div ng-if="item.api" class="source-container">
         <span>SOURCE ({{item.label}})</span>
       </div>
+
+      <div class="progress-container">
+        <div class="progress"></div>
+      </div>
     </div>
   </div>
+  <p>Glissez les éléments dans le slideshow</p>
   <div class="gallery">
-    <div class="gallery-wallpapers slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.gallery.wallpapers">
+    <div class="gallery-wallpapers" ng-model="settings.values.gallery.wallpapers">
       <div class="wallpaper-container" ng-repeat="wallpaper in settings.values.gallery.wallpapers track by $index" ng-if="!wallpaper.hidden">
         <div class="wallpaper"
           ng-style="{'background-image': 'url('+ getLocalUri(wallpaper.localUri)+')'}"
@@ -32,8 +36,8 @@
           <div class="remove-icon" ng-click="settings.removeWallpaper(wallpaper);">
             <i class="mdi mdi-close"></i>
           </div>
-          <div class="fullscreen-icon" ng-click="preview.set(wallpaper, true)">
-            <i class="mdi mdi-fullscreen"></i>
+          <div class="icon" ng-click="settings.values.slideshow.items.push(wallpaper)">
+            <i class="mdi mdi-plus"></i>
           </div>
         </div>
       </div>
