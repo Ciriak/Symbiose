@@ -345,13 +345,13 @@ body{
 
 .slideshow{
   overflow-x: scroll;
-  overflow-y: auto;
-  white-space: w;
+  overflow-y: hidden;
+  white-space: nowrap;
   height: 100px;
   .slideshow-item{
-    float: left;
     width: 20vw;
     position: relative;
+    display: inline-block;
     .progress-container{
       position: absolute;
       bottom: 0;
@@ -360,7 +360,7 @@ body{
       background-color: rgba(0, 0, 0, 0.5);
       .progress{
         width: 75%;
-          height: 2px;
+          height: 3px;
           background-color: $main-color;
       }
     }

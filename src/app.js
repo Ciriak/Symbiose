@@ -659,13 +659,13 @@ function genId(source, wallpaper){
 
 function launchWallpaperJob(){
   var screens = electron.screen.getAllDisplays();
-  if(!settings.gallery.wallpapers || settings.gallery.wallpapers.length === 0){
+  if(!settings.slideshow.items || settings.slideshow.items.length === 0){
     console.log("No wallpaper, abording...");
     return;
   }
   if(settings.gallery.changeOnStartup === true){
     console.log("Setting wallpaper (launch)");
-    createWallpaper(settings.gallery.wallpapers, screens, function(){
+    createWallpaper(settings.slideshow.items, screens, function(){
       return;
     });
   }
@@ -675,9 +675,9 @@ function launchWallpaperJob(){
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    /*createWallpaper(settings.gallery.wallpapers, screens, function(){
-      //done();
-    });*/
+    createWallpaper(settings.slideshow.items, screens, function(){
+      return;
+    });
   });
 }
 
@@ -737,8 +737,12 @@ function createWallpaper(wallpapers, screens, callback){
   }
 
   for (var i = 0; i < screens.length; i++) {
-    var wIndex = Math.floor(Math.random() * wallpapers.length)
-    stacks.push(createWallpaperFrame(screens[i], wallpapers[wIndex], i));
+    var tv = wallpapers[0];
+    stacks.push(createWallpaperFrame(screens[i], wallpapers[0], i));
+
+    //send the first item to the last position
+    wallpapers.splice(0, 1);
+    wallpapers.push(tv);
   }
 
   async.parallel(stacks, function(err, images) {

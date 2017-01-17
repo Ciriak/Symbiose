@@ -8,14 +8,17 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	};
 
 	$scope.slideshowOpt = {
-    placeholder: "placeholder"
+    placeholder: "placeholder",
+		update: function(e, ui) {
+	    $rootScope.settings.save();
+	  }
   };
 
-	$scope.settings.values.slideshow = {
-		items: [
-			$rootScope.sources["artStation"]
-		]
-	};
+	if(!$scope.settings.values.slideshow){
+		$scope.settings.values.slideshow = {
+			items: []
+		};
+	}
 
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 
