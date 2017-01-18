@@ -14,6 +14,15 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	  }
   };
 
+	//player logged
+  ipcRenderer.on("slideshowUpdate", function(slideshow){
+		console.log("slideshow updated");
+    $scope.settings.values.local.slideshow = slideshow;
+    if(!$scope.$$phase) {
+      $scope.$apply();
+    }
+  });
+
 	if(!$scope.settings.values.local.slideshow){
 		$scope.settings.values.local.slideshow = {
 			items: []

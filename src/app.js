@@ -14,6 +14,7 @@ var nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 var mainWindow;
+var renderIpc;
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
@@ -236,10 +237,12 @@ function initApp(callback){
 //send the wallpaper sources to the client when asked
 ipc.on('sources', function(event) {
   event.returnValue = sources;
+  renderIpc = event.sender;
 });
 
 ipc.on('getSettings', function(event) {
   event.returnValue = settings;
+  renderIpc = event.sender;
 });
 
 ipc.on('exist', function(event, path) {
@@ -790,6 +793,8 @@ var createWallpaperFrame = function(screen, wallpaper, index, callback){
       return callback(null, image);
     });
   };
+  renderIpc.send('slideshowUpdate', settings.local.slideshow);
+  console.log("Slideshow updated");
 };
 
 function rmDir(dirPath, removeSelf) {
