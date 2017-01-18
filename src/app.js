@@ -25,7 +25,10 @@ var settings = {
     tempDir: app.getPath("temp")+"\\"+pjson.name+"\\",
     localDir: app.getPath("appData")+"\\"+pjson.name+"\\",
     enableAssistant: true,
-    managedByOS: true
+    managedByOS: true,
+    slideshow: {
+      items: []
+    }
   },
   gallery: {
     wallpapers: []
@@ -611,7 +614,7 @@ function checkSettings(callback){
     if(settings.local.syncedPath){
       console.log("syncedSettings file available");
       // read the synced file and override params
-      sd = fs.readJsonSync(settings.local.syncedPath+"\\symbiose.json", {throws: false});
+      sd = fs.existsSync(settings.local.syncedPath+"\\symbiose.json");
 
       //can't read the defined json file
       if(!sd || sd === null){
@@ -659,13 +662,13 @@ function genId(source, wallpaper){
 
 function launchWallpaperJob(){
   var screens = electron.screen.getAllDisplays();
-  if(!settings.slideshow.items || settings.slideshow.items.length === 0){
+  if(!settings.local.slideshow.items || settings.local.slideshow.items.length === 0){
     console.log("No wallpaper, abording...");
     return;
   }
   if(settings.gallery.changeOnStartup === true){
     console.log("Setting wallpaper (launch)");
-    createWallpaper(settings.slideshow.items, screens, function(){
+    createWallpaper(settings.local.slideshow.items, screens, function(){
       return;
     });
   }
@@ -675,7 +678,7 @@ function launchWallpaperJob(){
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.slideshow.items, screens, function(){
+    createWallpaper(settings.local.slideshow.items, screens, function(){
       return;
     });
   });
@@ -773,6 +776,7 @@ function createWallpaper(wallpapers, screens, callback){
 }
 
 var createWallpaperFrame = function(screen, wallpaper, index, callback){
+  console.log(wallpaper.localUri);
   var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
   return function(callback){
     Jimp.read(u, function (err, image) {
