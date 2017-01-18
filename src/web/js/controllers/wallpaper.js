@@ -14,8 +14,8 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 	  }
   };
 
-	if(!$scope.settings.values.slideshow){
-		$scope.settings.values.slideshow = {
+	if(!$scope.settings.values.local.slideshow){
+		$scope.settings.values.local.slideshow = {
 			items: []
 		};
 	}

@@ -4,8 +4,8 @@
       {{screen.size.width}}X{{screen.size.height}}
     </div>
   </div>
-  <div class="slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.slideshow.items">
-    <div class="slideshow-item" ng-repeat="item in settings.values.slideshow.items track by $index">
+  <div class="slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.local.slideshow.items">
+    <div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items track by $index">
 
       <!-- if wallpaper -->
       <div ng-if="item.localUri" class="wallpaper-container">
@@ -36,7 +36,7 @@
           <div class="remove-icon" ng-click="settings.removeWallpaper(wallpaper);">
             <i class="mdi mdi-close"></i>
           </div>
-          <div class="icon" ng-click="settings.values.slideshow.items.push(wallpaper)">
+          <div class="icon" ng-click="settings.values.local.slideshow.items.push(wallpaper); settings.save();">
             <i class="mdi mdi-plus"></i>
           </div>
         </div>

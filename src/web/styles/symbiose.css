@@ -280,16 +280,31 @@ body {
   background-color: rgba(0, 0, 0, 0.5); }
 
 .slideshow {
-  display: flex; }
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  height: 20vh; }
   .slideshow .slideshow-item {
-    width: 20%; }
+    width: 20vw;
+    position: relative;
+    display: inline-block; }
+    .slideshow .slideshow-item .progress-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5); }
+      .slideshow .slideshow-item .progress-container .progress {
+        width: 75%;
+        height: 3px;
+        background-color: #D500F9; }
     .slideshow .slideshow-item .source-container {
       height: 15vh;
       position: relative;
       background-color: rgba(0, 0, 0, 0.5); }
     .slideshow .slideshow-item .wallpaper-container {
-      height: 15vh;
-      position: relative; }
+      background-color: rgba(0, 0, 0, 0.5);
+      height: calc(20vh - 20px); }
       .slideshow .slideshow-item .wallpaper-container .wallpaper {
         width: 100%;
         height: 100%;
@@ -304,7 +319,7 @@ body {
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.7); }
-        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .fullscreen-icon {
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .icon {
           opacity: 0.6;
           transition-duration: 0.3s;
           width: 100%;
@@ -313,7 +328,7 @@ body {
           padding-top: 6vh;
           font-size: 1.5rem;
           cursor: pointer; }
-        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .fullscreen-icon:hover {
+        .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .icon:hover {
           opacity: 1.0; }
         .slideshow .slideshow-item .wallpaper-container .wallpaper-overlay .remove-icon {
           opacity: 0.6;
@@ -331,7 +346,6 @@ body {
         opacity: 1.0; }
 
 .gallery .gallery-wallpapers .wallpaper-container {
-  float: left;
   width: 20%;
   height: 15vh;
   display: inline-block;
@@ -353,7 +367,7 @@ body {
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.7); }
-    .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay .fullscreen-icon {
+    .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay .icon {
       opacity: 0.6;
       transition-duration: 0.3s;
       width: 100%;
@@ -362,7 +376,7 @@ body {
       padding-top: 6vh;
       font-size: 1.5rem;
       cursor: pointer; }
-    .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay .fullscreen-icon:hover {
+    .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay .icon:hover {
       opacity: 1.0; }
     .gallery .gallery-wallpapers .wallpaper-container .wallpaper-overlay .remove-icon {
       opacity: 0.6;
