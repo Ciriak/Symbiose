@@ -666,7 +666,7 @@ function launchWallpaperJob(){
     console.log("No wallpaper, abording...");
     return;
   }
-  if(settings.gallery.changeOnStartup === true){
+  if(settings.local.slideshow.changeDelay === true){
     console.log("Setting wallpaper (launch)");
     createWallpaper(settings.local.slideshow.items, screens, function(){
       return;
@@ -674,7 +674,7 @@ function launchWallpaperJob(){
   }
 
   var rule = new schedule.RecurrenceRule();
-  rule.minute = new schedule.Range(0, 59, settings.gallery.changeDelay);
+  rule.minute = new schedule.Range(0, 59, settings.local.slideshow.changeDelay);
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
