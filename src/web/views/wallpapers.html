@@ -1,7 +1,7 @@
 <div ng-controller="wallpaperCtrl">
   <div class="screens-carrousel">
     <div class="screen" ng-repeat="screen in screens.displays track by $index" ng-attr-id="screen-{{screen.id}}" ng-style="{'background-image':'url('+getLocalUri(settings.values.local.tempDir+'//frame_'+$index+'.jpg')+')', 'width':screen.container.width+'%'}">
-      {{screen.size.width}}X{{screen.size.height}}
+      <!--{{screen.size.width}}X{{screen.size.height}}-->
     </div>
   </div>
   <div class="slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.local.slideshow.items">

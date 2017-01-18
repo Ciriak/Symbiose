@@ -1,5 +1,6 @@
 var electron = require('electron');
 var {app} = require('electron');
+var {webContents} = require('electron')
 var Menu = electron.Menu;
 var BrowserWindow = electron.BrowserWindow;
 var GhReleases = require('electron-gh-releases');
@@ -329,10 +330,9 @@ ipc.on('restart', function(event){
 
 ipc.on('setWallpaper', function(event, wallpapers){
   var screens = electron.screen.getAllDisplays();
-  /*createWallpaper(wallpapers, screens, function(image){
+  createWallpaper(wallpapers, screens, function(image){
     console.log("created");
-
-  });*/
+  });
   event.returnValue = true;
 });
 
@@ -669,7 +669,7 @@ function launchWallpaperJob(){
     console.log("No wallpaper, abording...");
     return;
   }
-  if(settings.local.slideshow.changeDelay === true){
+  if(settings.local.slideshow.changeOnStartup === true){
     console.log("Setting wallpaper (launch)");
     createWallpaper(settings.local.slideshow.items, screens, function(){
       return;
@@ -742,7 +742,7 @@ function createWallpaper(wallpapers, screens, callback){
     }
   }
 
-  for (var i = 0; i < screens.length; i++) {
+  for (i = 0; i < screens.length; i++) {
     var tv = wallpapers[0];
     stacks.push(createWallpaperFrame(screens[i], wallpapers[0], i));
 
@@ -768,6 +768,9 @@ function createWallpaper(wallpapers, screens, callback){
         console.log(y);
         generated.composite( images[i], x, y );
       }
+      console.log(webContents);
+      mainWindow.webContents.send('slideshowUpdate', settings.local.slideshow);
+      console.log("Slideshow updated");
       generated.write(tempDir+"\\wallpaper.jpg");
       nodeWallpaper.set(tempDir+"\\wallpaper.jpg", function(){
         return callback();
@@ -793,8 +796,6 @@ var createWallpaperFrame = function(screen, wallpaper, index, callback){
       return callback(null, image);
     });
   };
-  renderIpc.send('slideshowUpdate', settings.local.slideshow);
-  console.log("Slideshow updated");
 };
 
 function rmDir(dirPath, removeSelf) {

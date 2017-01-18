@@ -15,8 +15,7 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
   };
 
 	//player logged
-  ipcRenderer.on("slideshowUpdate", function(slideshow){
-		console.log("slideshow updated");
+  ipcRenderer.on("slideshowUpdate", function(event, slideshow){
     $scope.settings.values.local.slideshow = slideshow;
     if(!$scope.$$phase) {
       $scope.$apply();
@@ -28,6 +27,10 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 			items: []
 		};
 	}
+
+	$scope.getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+	};
 
 	for (var i = 0; i < $scope.screens.displays.length; i++) {
 
