@@ -279,6 +279,19 @@ body {
   height: 15vh;
   background-color: rgba(0, 0, 0, 0.5); }
 
+.progress-container {
+  width: 50%;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: auto;
+  margin-bottom: 50px;
+  border-radius: 3px;
+  overflow: hidden; }
+  .progress-container .progress {
+    background-color: #D500F9;
+    height: 100%;
+    width: 0%; }
+
 .slideshow {
   overflow-x: scroll;
   overflow-y: hidden;
@@ -288,16 +301,6 @@ body {
     width: 20vw;
     position: relative;
     display: inline-block; }
-    .slideshow .slideshow-item .progress-container {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.5); }
-      .slideshow .slideshow-item .progress-container .progress {
-        width: 75%;
-        height: 3px;
-        background-color: #D500F9; }
     .slideshow .slideshow-item .source-container {
       height: 15vh;
       position: relative;

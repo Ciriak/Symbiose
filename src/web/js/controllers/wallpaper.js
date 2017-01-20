@@ -16,7 +16,12 @@ app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, 
 
 	//player logged
   ipcRenderer.on("slideshowUpdate", function(event, slideshow){
+		console.log(slideshow);
     $scope.settings.values.local.slideshow = slideshow;
+		$(".progress").stop().css("width", 0);
+		$(".progress").animate({
+    	width: "100%",
+		}, slideshow.changeDelay*(1000*55), "linear");
     if(!$scope.$$phase) {
       $scope.$apply();
     }

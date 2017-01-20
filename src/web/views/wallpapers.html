@@ -4,6 +4,11 @@
       <!--{{screen.size.width}}X{{screen.size.height}}-->
     </div>
   </div>
+
+  <div class="progress-container">
+    <div class="progress"></div>
+  </div>
+
   <div class="slideshow" ui-sortable="slideshowOpt" ng-model="settings.values.local.slideshow.items">
     <div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items track by $index">
 
@@ -17,10 +22,6 @@
       <!-- if source -->
       <div ng-if="item.api" class="source-container">
         <span>SOURCE ({{item.label}})</span>
-      </div>
-
-      <div class="progress-container">
-        <div class="progress"></div>
       </div>
     </div>
   </div>

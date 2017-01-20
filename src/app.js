@@ -671,9 +671,12 @@ function launchWallpaperJob(){
   }
   if(settings.local.slideshow.changeOnStartup === true){
     console.log("Setting wallpaper (launch)");
-    createWallpaper(settings.local.slideshow.items, screens, function(){
-      return;
-    });
+    setTimeout(function(){
+      createWallpaper(settings.local.slideshow.items, screens, function(){
+        return;
+      });
+    }, 5000);
+
   }
 
   var rule = new schedule.RecurrenceRule();
