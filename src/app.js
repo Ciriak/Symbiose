@@ -153,7 +153,7 @@ function handleSquirrelEvent() {
 
       // Remove desktop and start menu shortcuts
       if(process.platform === 'win32') {
-        for (var i = 0; i < lnkPath.length; i++) {
+        for (var a = 0; a < lnkPath.length; a++) {
           fs.access(lnkPath[i], fs.F_OK, function(err) {
               if (!err) {
                 fs.unlink(lnkPath[i]);
@@ -173,17 +173,17 @@ function handleSquirrelEvent() {
       app.quit();
       return true;
   }
-};
+}
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 });
 
 
 
-app.on('ready', () => {
+app.on('ready', function(){
   openApp();
 });
 
@@ -197,24 +197,27 @@ app.on('activate', function () {
 
 //open the tagifier main process
 function openApp(){
+
   mainWindow = new BrowserWindow({
     show: false,
-    center: true,
-    resizable : true,
+    resizable: true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
+
   mainWindow.loadURL('file://' + __dirname + '/web/index.html', {extraHeaders: 'pragma: no-cache\n'});
+
   //display the main app and close the
   mainWindow.once('ready-to-show', function(){
+
     //hide menu bar
     mainWindow.setMenu(null);
-   //clear cache
+
+     //clear cache
     mainWindow.show();
     mainWindow.focus();
     initApp(function(){
       checkUpdates();
     });
-
   });
 }
 
@@ -367,10 +370,14 @@ ipc.on('removeWallpaper', function(event, wallpaper){
 });
 
 function saveSettings(settings, callback){
+
+  //write the local values into the local file
   fs.writeJson(settings.local.localSettingsFile, settings.local, function(err){
     if(err){
       return callback(err);
     }
+
+    // if synced path set then save sync settings into it
     if(settings.local.syncedPath){
       var syncedData = {};
       for (var prop in settings) {
@@ -390,6 +397,7 @@ function saveSettings(settings, callback){
   });
 }
 
+//request data from a resource
 
 function requestData(event, queryId, elems, search, uriType, source, callback){
   //Set base if uritype is not defined
@@ -418,6 +426,7 @@ function requestData(event, queryId, elems, search, uriType, source, callback){
   });
 }
 
+//parse the data retreived from a source according to the saved schemas
 function parseData(event, queryId, elems, data, source, callback){
   var required = ["id", "title", "url"];
   var wp = objectPath.get(data, source.api.wallpapers.path);
@@ -663,12 +672,15 @@ function genId(source, wallpaper){
   return i+"-"+wallpaper.id;
 }
 
+// set the background function who automaticly set the wallpapers
 function launchWallpaperJob(){
   var screens = electron.screen.getAllDisplays();
   if(!settings.local.slideshow.items || settings.local.slideshow.items.length === 0){
     console.log("No wallpaper, abording...");
     return;
   }
+
+  // start the process a first time if "changeOnStartup" is enabled on settings
   if(settings.local.slideshow.changeOnStartup === true){
     console.log("Setting wallpaper (launch)");
     setTimeout(function(){
@@ -684,9 +696,7 @@ function launchWallpaperJob(){
 
   wallpaperJob = schedule.scheduleJob(rule, function(){
     console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.local.slideshow.items, screens, function(){
-      return;
-    });
+    createWallpaper(settings.local.slideshow.items, screens);
   });
 }
 
