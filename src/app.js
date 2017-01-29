@@ -1,5 +1,5 @@
 var electron = require('electron');
-var {app} = require('electron');
+var {app, Menu, Tray} = require('electron');
 var {webContents} = require('electron')
 var Menu = electron.Menu;
 var BrowserWindow = electron.BrowserWindow;
@@ -176,15 +176,13 @@ function handleSquirrelEvent() {
 }
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  //nothing
 });
 
 
 
 app.on('ready', function(){
-  openApp();
+  generateTray();
 });
 
 app.on('activate', function () {
@@ -194,6 +192,43 @@ app.on('activate', function () {
     openApp();
   }
 });
+
+//generate tray icon and associated actions
+function generateTray(){
+  tray = new Tray(__dirname + '/web/img/tgf/icon_circle.png');
+  // right click context menu
+  var contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Next wallpaper'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: 'Gallery',
+      click: function(){
+        openApp();
+      }
+    },
+    {
+      label: 'Settings',
+      click: function(){
+        openApp();
+      }
+    },
+    {
+      label: 'Quit',
+      click: function(){
+        app.quit();
+      }
+    }
+  ]);
+  tray.on('click', function(){
+    openApp();
+  });
+  tray.setToolTip('Symbiose is running...');
+  tray.setContextMenu(contextMenu);
+}
 
 //open the tagifier main process
 function openApp(){
@@ -224,7 +259,7 @@ function openApp(){
 function initApp(callback){
   checkSettings(function(openAssistant){
 
-    // open the app with the assistant
+    // Stop if the app must open in assistant mode
     if(openAssistant === true){
       return callback();
     }
@@ -782,7 +817,7 @@ function createWallpaper(wallpapers, screens, callback){
         generated.composite( images[i], x, y );
       }
       console.log(webContents);
-      mainWindow.webContents.send('slideshowUpdate', settings.local.slideshow);
+      //mainWindow.webContents.send('slideshowUpdate', settings.local.slideshow);
       console.log("Slideshow updated");
       generated.write(tempDir+"\\wallpaper.jpg");
       nodeWallpaper.set(tempDir+"\\wallpaper.jpg", function(){
