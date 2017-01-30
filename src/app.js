@@ -14,7 +14,8 @@ var exeName = "Symbiose.exe";
 var nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
-var mainWindow;
+var mainFrame;
+var slideshowFrame;
 var renderIpc;
 //retreive package.json properties
 var pjson = require('./package.json');
@@ -182,6 +183,7 @@ app.on('window-all-closed', function () {
 
 
 app.on('ready', function(){
+  preloadApp();
   generateTray();
 });
 
@@ -189,7 +191,7 @@ app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    openApp();
+
   }
 });
 
@@ -224,35 +226,65 @@ function generateTray(){
     }
   ]);
   tray.on('click', function(){
-    openApp();
+    openSlideshow();
   });
   tray.setToolTip('Symbiose is running...');
   tray.setContextMenu(contextMenu);
 }
 
-//open the tagifier main process
 function openApp(){
+  mainFrame.show();
+  mainFrame.focus();
+}
 
-  mainWindow = new BrowserWindow({
+function openSlideshow(){
+  slideshowFrame.show();
+  slideshowFrame.focus();
+}
+
+//open the tagifier main process
+function preloadApp(){
+
+  mainFrame = new BrowserWindow({
     show: false,
     resizable: true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
 
-  mainWindow.loadURL('file://' + __dirname + '/web/index.html', {extraHeaders: 'pragma: no-cache\n'});
+  mainFrame.loadURL('file://' + __dirname + '/web/index.html', {extraHeaders: 'pragma: no-cache\n'});
 
   //display the main app and close the
-  mainWindow.once('ready-to-show', function(){
+  mainFrame.once('ready-to-show', function(){
 
     //hide menu bar
-    mainWindow.setMenu(null);
+    mainFrame.setMenu(null);
 
-     //clear cache
-    mainWindow.show();
-    mainWindow.focus();
     initApp(function(){
       checkUpdates();
     });
+  });
+
+  slideshowFrame = new BrowserWindow({
+    x: 0,
+    y: 0,
+    show: false,
+    resizable: false,
+    movable: false,
+    alwaysOnTop: true,
+    transparent: true,
+    icon: __dirname + '/web/img/tgf/icon_circle.png',
+    frame: false,
+    width: 800,
+    height: 150
+  });
+
+  slideshowFrame.loadURL('file://' + __dirname + '/web/views/slideshow.html', {extraHeaders: 'pragma: no-cache\n'});
+
+  //display the main app and close the
+  slideshowFrame.once('ready-to-show', function(){
+
+    //hide menu bar
+    slideshowFrame.setMenu(null);
   });
 }
 
