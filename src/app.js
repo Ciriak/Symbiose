@@ -15,8 +15,10 @@ var nodeWallpaper = require('wallpaper');
 require('electron-debug')({showDevTools: true});
 var regedit = require('regedit');
 var mainFrame;
-var slideshowFrame;
+var overlayFrame;
+var overlayEnabled = false;
 var renderIpc;
+var screens;
 //retreive package.json properties
 var pjson = require('./package.json');
 var sources = require('./sources.json');
@@ -183,7 +185,8 @@ app.on('window-all-closed', function () {
 
 
 app.on('ready', function(){
-  preloadApp();
+  screens = electron.screen.getAllDisplays();
+  loadFrames();
   generateTray();
 });
 
@@ -226,7 +229,7 @@ function generateTray(){
     }
   ]);
   tray.on('click', function(){
-    openSlideshow();
+    toggleOverlay();
   });
   tray.setToolTip('Symbiose is running...');
   tray.setContextMenu(contextMenu);
@@ -237,18 +240,46 @@ function openApp(){
   mainFrame.focus();
 }
 
-function openSlideshow(){
-  slideshowFrame.show();
-  slideshowFrame.focus();
+//open or close the overlay : force = open or close
+function toggleOverlay(force){
+  if(!overlayEnabled || force === 'open'){
+    overlayFrame.show();
+    overlayFrame.focus();
+    overlayEnabled = true;
+  }
+  else{
+    overlayFrame.hide();
+    overlayEnabled = false;
+  }
+
 }
 
 //open the tagifier main process
-function preloadApp(){
+function loadFrames(){
 
+  //main frame (settings / gallery etc...)
   mainFrame = new BrowserWindow({
     show: false,
     resizable: true,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
+  });
+
+  //slideshow : widget overlay who appear when user click on tray icon
+  //calc the dimensions for the overlay
+  var overlayDim = getOverlayDimensions(screens);
+
+  overlayFrame = new BrowserWindow({
+    x: overlayDim.x,
+    y: overlayDim.y,
+    show: false,
+    resizable: false,
+    movable: false,
+    alwaysOnTop: true,
+    transparent: true,
+    icon: __dirname + '/web/img/tgf/icon_circle.png',
+    frame: false,
+    width: overlayDim.w,
+    height: overlayDim.h
   });
 
   mainFrame.loadURL('file://' + __dirname + '/web/index.html', {extraHeaders: 'pragma: no-cache\n'});
@@ -264,28 +295,29 @@ function preloadApp(){
     });
   });
 
-  slideshowFrame = new BrowserWindow({
-    x: 0,
-    y: 0,
-    show: false,
-    resizable: false,
-    movable: false,
-    alwaysOnTop: true,
-    transparent: true,
-    icon: __dirname + '/web/img/tgf/icon_circle.png',
-    frame: false,
-    width: 800,
-    height: 150
-  });
 
-  slideshowFrame.loadURL('file://' + __dirname + '/web/views/slideshow.html', {extraHeaders: 'pragma: no-cache\n'});
+
+  overlayFrame.loadURL('file://' + __dirname + '/web/views/slideshow.html', {extraHeaders: 'pragma: no-cache\n'});
 
   //display the main app and close the
-  slideshowFrame.once('ready-to-show', function(){
+  overlayFrame.once('ready-to-show', function(){
 
     //hide menu bar
-    slideshowFrame.setMenu(null);
+    overlayFrame.setMenu(null);
   });
+}
+
+function getOverlayDimensions(screens){
+  var dim = {
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 150
+  };
+  // overlay is stuck at the bottom with full width and height = 150px
+  dim.y = screens[0].workAreaSize.height - dim.h;
+  dim.w = screens[0].workAreaSize.width;
+  return dim;
 }
 
 function initApp(callback){
@@ -399,7 +431,6 @@ ipc.on('restart', function(event){
 });
 
 ipc.on('setWallpaper', function(event, wallpapers){
-  var screens = electron.screen.getAllDisplays();
   createWallpaper(wallpapers, screens, function(image){
     console.log("created");
   });
@@ -741,7 +772,6 @@ function genId(source, wallpaper){
 
 // set the background function who automaticly set the wallpapers
 function launchWallpaperJob(){
-  var screens = electron.screen.getAllDisplays();
   if(!settings.local.slideshow.items || settings.local.slideshow.items.length === 0){
     console.log("No wallpaper, abording...");
     return;
