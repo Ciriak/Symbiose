@@ -13,11 +13,9 @@
   </head>
   <body>
     <!-- top bar -->
-    <div ng-include="'views/topbar.html'"></div>
-    <!-- sidebar -->
-    <div ng-include="'views/sidebar.html'" ng-hide="settings.values.local.enableAssistant === true"></div>
+    <div ng-include="'views/topbar.html'" ng-hide="settings.values.local.enableAssistant === true"></div>
     <!-- main nav -->
-    <div class="content" ng-include="'views/'+page+'.html'"></div>
+    <div class="content" ng-include="'views/gallery.html'"></div>
 
     <!-- fullscreen preview -->
     <div class="preview" ng-show="preview.wallpaper" ng-include="'views/preview.html'"></div>
