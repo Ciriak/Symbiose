@@ -261,6 +261,7 @@ function loadFrames(){
   mainFrame = new BrowserWindow({
     show: false,
     resizable: true,
+    frame: false,
     icon: __dirname + '/web/img/tgf/icon_circle.png'
   });
 
@@ -341,6 +342,14 @@ function initApp(callback){
 ipc.on('sources', function(event) {
   event.returnValue = sources;
   renderIpc = event.sender;
+});
+
+ipc.on('frameInteraction', function(event, interaction){
+  var w = BrowserWindow.fromWebContents(event.sender.webContents);
+  console.log(w);
+  if(w){
+    w[interaction]();
+  }
 });
 
 ipc.on('getSettings', function(event) {

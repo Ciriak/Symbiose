@@ -24,7 +24,7 @@ app.filter("trustUrl", ['$sce', function ($sce) { //used by media player
 
 app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$window', '$location', 'ipcRenderer', 'BrowserWindow', function($scope, $http, $rootScope, $translate, $window, $location, ipcRenderer, BrowserWindow)
 {
-  $scope.page = "wallpapers";   //default page
+  $scope.page = "gallery";   //default page
 
   ipcRenderer.send("retreiveLocalGallery");
 
@@ -102,6 +102,11 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     }
     var r = ipcRenderer.sendSync("getLocalUri", uri);
     return r;
+  };
+
+  // send a nav event for the main process (close minify maximize...)
+  $rootScope.frameInteraction = function(interaction){
+    ipcRenderer.send('frameInteraction', interaction);
   };
 
   $rootScope.settings = {

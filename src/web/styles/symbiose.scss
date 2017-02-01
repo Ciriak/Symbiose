@@ -16,7 +16,6 @@ body{
   font-family: Arial;
   margin: 0;
   padding:0;
-  display:flex;
 }
 
 .logo{
@@ -65,14 +64,35 @@ body{
     }
 }
 
+header{
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  .item{
+    font-size: 1.5rem;
+    margin: 10px;
+    p{
+      margin: 0;
+    }
+  }
+  .window-nav{
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    .nav-item{
+      padding: 5px;
+    }
+  }
+}
+
 .gallery{
   width: 100%;
   .gallery-item{
     display: inline-block;
     background-color: #000;
-    width: 20vh;
+    width: 30vh;
     height: 20vh;
-    margin: 10px;
+    margin: 1vw;
     position: relative;
     overflow: hidden;
     border: 2px #000 solid;

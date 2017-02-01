@@ -1,3 +1,23 @@
-<div class="topbar">
-  
-</div>
+<header>
+  <div class="item logo"></div>
+  <div class="item" ng-click="setPage('gallery');">
+    <p>GALLERY</p>
+  </div>
+  <div class="item" ng-click="setPage('explore');">
+    <p>EXPLORE</p>
+  </div>
+  <div class="item" ng-click="setPage('settings');">
+    <i class="mdi mdi-settings"></i>
+  </div>
+  <div class="item window-nav">
+    <div class="nav-item" ng-click="frameInteraction('minimize')">
+      <i class="mdi mdi-window-minimize"></i>
+    </div>
+    <div class="nav-item" ng-click="frameInteraction('maximize')">
+      <i class="mdi mdi-window-maximize"></i>
+    </div>
+    <div class="nav-item" ng-click="frameInteraction('hide')">
+      <i class="mdi mdi-close"></i>
+    </div>
+  </div>
+</header>
