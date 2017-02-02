@@ -834,6 +834,8 @@ ipc.on('installUpdate', function (fileData) {
 });
 
 function createWallpaper(wallpapers, screens, callback){
+  //temp
+  return;
   var stacks = [];
   var frame = {
     width: 0,

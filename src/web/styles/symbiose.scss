@@ -1,18 +1,11 @@
-$side-bg: #252525;
-$side-text: #FAFAFA;
-$content-bg: #292F37;
-$content-text: #808CA4;
-$main-color: #D500F9;
-$main-color-dark: #AA00FF;
-
 @font-face {
     font-family: Orbitron;
     src: url('../fonts/Orbitron-Regular.ttf');
 }
 
 body{
-  background-color: $side-bg;
-  color: $side-text;
+  background-color: #2A2E37;
+  color: #373E48;
   font-family: Arial;
   margin: 0;
   padding:0;
@@ -69,13 +62,21 @@ header{
   display: flex;
   flex-direction: row;
   width: 100vw;
+  background-color: #373E48;
+  color: #6A7E90;
   .item{
     -webkit-app-region: no-drag;
     font-size: 1.5rem;
     margin: 10px;
+    cursor: pointer;
+    transition-duration: 0.3s;
     p{
       margin: 0;
+      padding: 5px;
     }
+  }
+  .item:hover{
+    color:#fff;
   }
   .window-nav{
     -webkit-app-region: no-drag;
@@ -90,6 +91,24 @@ header{
 
 .gallery{
   width: 100%;
+  .gallery-tools{
+    .tool{
+      display: inline-block;
+      font-size: 1.3rem;
+      margin: 10px;
+      margin-top: 15px;
+      margin-bottom: 0;
+      padding: 5px;
+      color:#fff;
+      width: 24px;
+      border: 1px #fff solid;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .tool:first-child{
+      margin-left: 20px;
+    }
+  }
   .gallery-item{
     display: inline-block;
     background-color: #000;
@@ -123,7 +142,7 @@ header{
   h1{
     text-align: left;
     font-size: 1.3rem;
-    color:$content-text;
+    color:#E5E7E7;
   }
   ul{
     padding: 0;
@@ -138,7 +157,7 @@ header{
       p{
         display: inline-block;
         font-size: 0.9rem;
-        color: $content-text;
+        color: #E5E7E7;
       }
     }
   }
@@ -146,7 +165,7 @@ header{
     font-weight: bold;
     background-color: transparent;
     border: 0;
-    color: $content-text;
+    color: #E5E7E7;
     max-width: 40px;
   }
 }
@@ -160,10 +179,10 @@ header{
 }
 
 button{
-  color: $content-text;
+  color: #E5E7E7;
   padding: 5px 10px 5px 10px;
   background-color: transparent;
-  border: 1px $side-bg solid;
+  border: 1px #373E48 solid;
   border-radius: 3px;
   min-width: 100px;
   transition-duration: 0.3s;
@@ -172,10 +191,10 @@ button{
 
 button:hover{
   color: #fff;
-  border-color: $main-color-dark;
+  border-color: #ccc;
 }
 
 button:active{
   color: #fff;
-  border-color: $main-color;
+  border-color: #ccc;
 }
