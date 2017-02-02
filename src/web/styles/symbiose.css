@@ -49,15 +49,18 @@ body {
     transform: rotate(360deg); } }
 
 header {
+  -webkit-app-region: drag;
   display: flex;
   flex-direction: row;
   width: 100vw; }
   header .item {
+    -webkit-app-region: no-drag;
     font-size: 1.5rem;
     margin: 10px; }
     header .item p {
       margin: 0; }
   header .window-nav {
+    -webkit-app-region: no-drag;
     margin-left: auto;
     display: flex;
     flex-direction: row; }

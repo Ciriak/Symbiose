@@ -346,7 +346,6 @@ ipc.on('sources', function(event) {
 
 ipc.on('frameInteraction', function(event, interaction){
   var w = BrowserWindow.fromWebContents(event.sender.webContents);
-  console.log(w);
   if(w){
     w[interaction]();
   }
@@ -466,7 +465,6 @@ ipc.on('saveWallpaper', function(event, wallpaper){
 
 ipc.on('removeWallpaper', function(event, wallpaper){
   var u = wallpaper.localUri.replace('%localDir%', settings.local.syncedPath);
-  console.log(u);
   fs.remove(u, function (err) {
     if (err){
       console.log(err);
@@ -689,8 +687,6 @@ function checkWallpapers(callback){
       // substring = remove .jpg / .png etc...
       var index = _.findIndex(fileDetails, function(o) { return o.id == items[f].substring(0, items[f].length - 4); });
       if(index > -1){
-        console.log(index);
-        console.log(fileDetails[index]);
         newWallpapers.push(fileDetails[index]);
       }
       else{

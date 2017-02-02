@@ -65,10 +65,12 @@ body{
 }
 
 header{
+  -webkit-app-region: drag;
   display: flex;
   flex-direction: row;
   width: 100vw;
   .item{
+    -webkit-app-region: no-drag;
     font-size: 1.5rem;
     margin: 10px;
     p{
@@ -76,6 +78,7 @@ header{
     }
   }
   .window-nav{
+    -webkit-app-region: no-drag;
     margin-left: auto;
     display: flex;
     flex-direction: row;
