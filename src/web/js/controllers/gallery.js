@@ -7,13 +7,6 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 		maxHeightItemIndex: null
 	};
 
-	$scope.slideshowOpt = {
-    placeholder: "placeholder",
-		update: function(e, ui) {
-	    $rootScope.settings.save();
-	  }
-  };
-
 	//player logged
   ipcRenderer.on("slideshowUpdate", function(event, slideshow){
 		console.log(slideshow);

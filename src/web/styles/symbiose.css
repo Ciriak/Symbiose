@@ -7,7 +7,8 @@ body {
   color: #373E48;
   font-family: Arial;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  overflow: hidden; }
 
 .logo {
   font-family: 'Orbitron', sans-serif; }
@@ -74,43 +75,50 @@ header {
     header .window-nav .nav-item {
       padding: 5px; }
 
-.gallery {
-  width: 100%; }
-  .gallery .gallery-tools .tool {
-    display: inline-block;
-    font-size: 1.3rem;
-    margin: 10px;
-    margin-top: 15px;
-    margin-bottom: 0;
-    padding: 5px;
-    color: #fff;
-    width: 24px;
-    border: 1px #fff solid;
-    border-radius: 5px;
-    text-align: center; }
-  .gallery .gallery-tools .tool:first-child {
-    margin-left: 20px; }
-  .gallery .gallery-item {
-    display: inline-block;
-    background-color: #000;
-    width: 30vh;
-    height: 20vh;
-    margin: 1vw;
-    position: relative;
-    overflow: hidden;
-    border: 2px #000 solid;
-    border-radius: 3px; }
-    .gallery .gallery-item .item-img {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      opacity: 0.7;
-      transition-duration: 0.3s; }
-  .gallery .gallery-item:hover .item-img {
-    opacity: 1.0; }
+.content {
+  height: calc(100vh - 50px);
+  overflow-y: auto; }
+
+.gallery .gallery-tools .tool {
+  display: inline-block;
+  font-size: 1.3rem;
+  margin: 10px;
+  margin-top: 15px;
+  margin-bottom: 0;
+  padding: 5px;
+  color: #fff;
+  width: 24px;
+  border: 1px #fff solid;
+  border-radius: 5px;
+  text-align: center; }
+
+.gallery .gallery-tools .tool:first-child {
+  margin-left: 20px; }
+
+.gallery .gallery-item {
+  display: inline-block;
+  background-color: #000;
+  width: 30vh;
+  min-width: 150px;
+  height: 20vh;
+  min-height: 100px;
+  margin: 10px;
+  position: relative;
+  overflow: hidden;
+  border: 2px #000 solid;
+  border-radius: 3px; }
+  .gallery .gallery-item .item-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    opacity: 0.7;
+    transition-duration: 0.3s; }
+
+.gallery .gallery-item:hover .item-img {
+  opacity: 1.0; }
 
 .settings {
   padding: 20px; }
