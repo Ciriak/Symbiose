@@ -1,4 +1,4 @@
-app.controller('wallpaperCtrl', function($scope, $rootScope, $http, $translate, $location, screen, ipcRenderer, app) {
+app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $location, screen, ipcRenderer, app) {
 	$scope.screens = {};
 	$scope.screens.displays = screen.getAllDisplays();
 	$scope.screens.dimensions = {
