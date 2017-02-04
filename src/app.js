@@ -710,6 +710,7 @@ function checkWallpapers(callback){
 }
 
 function checkSettings(callback){
+  var assistant = false;
   //create local settings file if not exist
   fs.ensureFile(settings.local.localSettingsFile, function (err) {
     if(err){
@@ -736,7 +737,7 @@ function checkSettings(callback){
         console.log("not readable");
         settings.local.enableAssistant = true;
         fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
-        return callback(true);
+        assistant = true;
       }
 
       for (var param in sd) {
@@ -749,16 +750,26 @@ function checkSettings(callback){
       settings.local.enableAssistant = false;
       fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
       console.log("synced settings loaded and applied");
-      return callback();
-
     }
     //json file not defined
     else{
       console.log("not defined");
       settings.local.enableAssistant = true;
       fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
-      return callback(true);
+      assistant = true;
     }
+
+    //check if the slideshow isnt empty, else add the default gallery
+    if(settings.local.slideshow.items.length === 0){
+      var t = {
+        type: "gallery"
+      }
+      settings.local.slideshow.items.push(t);
+      fs.writeJsonSync(settings.local.localSettingsFile, settings.local);
+    }
+
+    return callback(assistant);
+
   });
 
 }
