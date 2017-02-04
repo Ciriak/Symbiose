@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <style media="screen">
-    </style>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <img src="https://cdn.pixabay.com/photo/2013/07/12/12/58/tv-test-pattern-146649_640.png" alt="">
-  </body>
-</html>
+<div class="slideshow">
+  <div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items">
+    <div ng-if="item.type === 'gallery'">
+      Random wallpaper from your gallery
+    </div>
+    <div ng-if="item.type === 'source'">
+      Random wallpaper from a defined source
+    </div>
+    <div ng-if="item.type === 'wallpaper'">
+      Defined wallpaper
+    </div>
+  </div>
+</div>

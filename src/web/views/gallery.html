@@ -14,8 +14,8 @@
     </div>
   </div>
   <div class="gallery-item" ng-repeat="item in settings.values.gallery.wallpapers">
-    aa
     <div class="item-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}"></div>
     <div class="item-menu"></div>
   </div>
+  <div ng-include="'views/slideshow.html'"></div>
 </div>
