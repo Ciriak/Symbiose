@@ -183,11 +183,18 @@ app.on('window-all-closed', function () {
 });
 
 
-
+//app is ready to start
 app.on('ready', function(){
   screens = electron.screen.getAllDisplays();
-  loadFrames();
-  generateTray();
+  //load/check settings first
+  initApp(function(){
+    //check for updates
+    checkUpdates();
+    //preload the frames
+    loadFrames();
+    //generate the system tray icon
+    generateTray();
+  });
 });
 
 app.on('activate', function () {
@@ -290,15 +297,11 @@ function loadFrames(){
 
     //hide menu bar
     mainFrame.setMenu(null);
-
-    initApp(function(){
-      checkUpdates();
-    });
   });
 
 
 
-  overlayFrame.loadURL('file://' + __dirname + '/web/views/slideshow.html', {extraHeaders: 'pragma: no-cache\n'});
+  overlayFrame.loadURL('file://' + __dirname + '/web/overlay.html', {extraHeaders: 'pragma: no-cache\n'});
 
   //display the main app and close the
   overlayFrame.once('ready-to-show', function(){
@@ -331,7 +334,6 @@ function initApp(callback){
 
     //scan the wallpapers then open the app and start wallpaper job
     checkWallpapers(function(){
-      launchWallpaperJob();
       return callback();
     });
 
@@ -440,9 +442,8 @@ ipc.on('restart', function(event){
 
 ipc.on('setWallpaper', function(event, wallpapers){
   createWallpaper(wallpapers, screens, function(image){
-    console.log("created");
+    event.sender.send('wallpaperSet', image);
   });
-  event.returnValue = true;
 });
 
 //save a wallpaper to the user gallery
@@ -786,33 +787,6 @@ function genId(source, wallpaper){
   return i+"-"+wallpaper.id;
 }
 
-// set the background function who automaticly set the wallpapers
-function launchWallpaperJob(){
-  if(!settings.local.slideshow.items || settings.local.slideshow.items.length === 0){
-    console.log("No wallpaper, abording...");
-    return;
-  }
-
-  // start the process a first time if "changeOnStartup" is enabled on settings
-  if(settings.local.slideshow.changeOnStartup === true){
-    console.log("Setting wallpaper (launch)");
-    setTimeout(function(){
-      createWallpaper(settings.local.slideshow.items, screens, function(){
-        return;
-      });
-    }, 5000);
-
-  }
-
-  var rule = new schedule.RecurrenceRule();
-  rule.minute = new schedule.Range(0, 59, settings.local.slideshow.changeDelay);
-
-  wallpaperJob = schedule.scheduleJob(rule, function(){
-    console.log("Setting wallpaper (timer)");
-    createWallpaper(settings.local.slideshow.items, screens);
-  });
-}
-
 function checkUpdates(){
 
   // Check for updates
@@ -844,9 +818,8 @@ ipc.on('installUpdate', function (fileData) {
   updater.install();
 });
 
+//wallpapers = array of wallpaper object
 function createWallpaper(wallpapers, screens, callback){
-  //temp
-  return;
   var stacks = [];
   var frame = {
     width: 0,
@@ -870,6 +843,7 @@ function createWallpaper(wallpapers, screens, callback){
     }
   }
 
+  console.log("Creating a wallpaper with "+screens.length+" frames from :");
   for (i = 0; i < screens.length; i++) {
     var tv = wallpapers[0];
     stacks.push(createWallpaperFrame(screens[i], wallpapers[0], i));
@@ -885,6 +859,7 @@ function createWallpaper(wallpapers, screens, callback){
       return callback(err);
     }
 
+    console.log("Assembing...");
     var generated = new Jimp(frame.width, frame.height, function (err, generated) {
       if(err){
         console.log(err);
@@ -893,16 +868,14 @@ function createWallpaper(wallpapers, screens, callback){
       for (var i = 0; i < images.length; i++) {
         var x = screens[i].bounds.x+frame.offsetX;
         var y = screens[i].bounds.y+frame.offsetY;
-        console.log(y);
         generated.composite( images[i], x, y );
       }
-      console.log(webContents);
-      //mainWindow.webContents.send('slideshowUpdate', settings.local.slideshow);
-      console.log("Slideshow updated");
+      console.log("Saving the generated image...");
       generated.write(tempDir+"\\wallpaper.jpg");
-      nodeWallpaper.set(tempDir+"\\wallpaper.jpg", function(){
-        return callback();
-      });
+      nodeWallpaper.set(tempDir+"\\wallpaper.jpg");
+      console.log("...done");
+
+      return callback();
 
     });
 
@@ -919,7 +892,7 @@ var createWallpaperFrame = function(screen, wallpaper, index, callback){
         return callback(err, null);
       }
       image.cover(screen.size.width, screen.size.height);
-      console.log("Frame ready");
+      console.log("Frame "+index+" ready.");
       image.write(tempDir+"\\frame_"+index+".jpg");
       return callback(null, image);
     });
