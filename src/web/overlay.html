@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="symbiose" ng-controller="mainCtrl">
+  <head>
+    <meta charset="utf-8">
+    <title>Symbiose</title>
+    <link rel="stylesheet" href="dep/mdi/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="dep/animate.css/animate.min.css">
+    <link rel="stylesheet" href="css/symbiose.css" />
+  </head>
+  <body>
+    <div class="slideshow" ng-controller="slideshowCtrl" ng-init="slideshowJob()">
+      <p ng-show="processing">PROCESSING...</p>
+      <div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items">
+        <div ng-if="item.type === 'gallery'">
+          Random wallpaper from your gallery
+        </div>
+        <div ng-if="item.type === 'source'">
+          Random wallpaper from a defined source
+        </div>
+        <div ng-if="item.type === 'wallpaper'">
+          Defined wallpaper
+        </div>
+      </div>
+    </div>
+
+    <!-- require scripts -->
+    <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+    <script src="dep/angular/angular.min.js"></script>
+    <!-- used to cummunicate with angular & electron -->
+    <script src="dep/angular-electron/angular-electron.min.js"></script>
+    <!-- -->
+    <script src="dep/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="dep/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="dep/angular-translate/angular-translate.min.js"></script>
+    <script src="dep/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="dep/lodash/dist/lodash.min.js"></script>
+    <script src="dep/jquery-ui/jquery-ui.min.js" charset="utf-8"></script>
+    <script src="dep/object-path/index.js"></script>
+    <script src="dep/angular-ui-sortable/sortable.min.js" charset="utf-8"></script>
+    <script src="js/symbiose.js"></script>
+
+  </body>
+</html>

@@ -7,25 +7,6 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 		maxHeightItemIndex: null
 	};
 
-	//player logged
-  ipcRenderer.on("slideshowUpdate", function(event, slideshow){
-		console.log(slideshow);
-    $scope.settings.values.local.slideshow = slideshow;
-		$(".progress").stop().css("width", 0);
-		$(".progress").animate({
-    	width: "100%",
-		}, slideshow.changeDelay*(1000*55), "linear");
-    if(!$scope.$$phase) {
-      $scope.$apply();
-    }
-  });
-
-	if(!$scope.settings.values.local.slideshow){
-		$scope.settings.values.local.slideshow = {
-			items: []
-		};
-	}
-
 	$scope.getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 	};
