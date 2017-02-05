@@ -871,12 +871,12 @@ function createWallpaper(wallpapers, screens, callback){
         generated.composite( images[i], x, y );
       }
       console.log("Saving the generated image...");
-      generated.write(tempDir+"\\wallpaper.jpg");
-      nodeWallpaper.set(tempDir+"\\wallpaper.jpg");
-      console.log("...done");
-
-      return callback();
-
+      generated.write(tempDir+"\\wallpaper.jpg", function(r){
+        console.log(r);
+        nodeWallpaper.set(tempDir+"\\wallpaper.jpg");
+        console.log("...done");
+        return callback();
+      });
     });
 
   });
@@ -893,8 +893,10 @@ var createWallpaperFrame = function(screen, wallpaper, index, callback){
       }
       image.cover(screen.size.width, screen.size.height);
       console.log("Frame "+index+" ready.");
-      image.write(tempDir+"\\frame_"+index+".jpg");
-      return callback(null, image);
+      image.write(tempDir+"\\frame_"+index+".jpg", function(r, e){
+        return callback(null, image);
+      });
+
     });
   };
 };
