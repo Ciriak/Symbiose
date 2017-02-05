@@ -5,7 +5,7 @@ var Menu = electron.Menu;
 var BrowserWindow = electron.BrowserWindow;
 var GhReleases = require('electron-gh-releases');
 var ipc = electron.ipcMain;
-var ChildProcess = require('child_process');
+var childProcess = require('child_process');
 var path = require('path');
 var appFolder = path.resolve(process.execPath, '..');
 var rootAtomFolder = path.resolve(appFolder, '..');
@@ -98,7 +98,7 @@ function handleSquirrelEvent() {
     var spawnedProcess, error;
 
     try {
-      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+      spawnedProcess = childProcess.spawn(command, args, {detached: true});
     } catch (error) {}
 
     return spawnedProcess;
@@ -820,6 +820,12 @@ ipc.on('installUpdate', function (fileData) {
 
 //wallpapers = array of wallpaper object
 function createWallpaper(wallpapers, screens, callback){
+
+  //spawn a new process (prevent freeze)
+  var wpProcess = spawn('wallpaper.js', 'bar', 'baz', {
+    detached: true
+  });
+
   var stacks = [];
   var frame = {
     width: 0,
