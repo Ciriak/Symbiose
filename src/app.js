@@ -76,10 +76,8 @@ var options = {
 var updater = new GhReleases(options);
 
 // create the "temp" folder
-var tempDir = app.getPath("temp")+"\\"+pjson.name+"\\";
-var localDir = app.getPath("appData")+"\\"+pjson.name+"\\";
-if (!fs.existsSync(tempDir)){
-  fs.mkdirSync(tempDir);
+if (!fs.existsSync(settings.local.tempDir)){
+  fs.mkdirSync(settings.local.tempDir);
 }
 
 
@@ -622,7 +620,7 @@ function processWallpaper(event, queryId, wallpaper, callback){
         wallpaper[prop] = result[prop];
       }
 
-      var uri = url.parse(tempDir+"/"+wallpaper.id+"."+wallpaper.type).href;
+      var uri = url.parse(settings.local.tempDir+"/"+wallpaper.id+"."+wallpaper.type).href;
       //write the image to the disk
       fs.writeFile(uri, body, {
           encoding : null
@@ -825,7 +823,15 @@ function createWallpaper(wallpapers, screens, callback){
   var wallpaperProcess = childProcess.fork('wallpaper.js', {
     cwd: __dirname
   });
-  wallpaperProcess.send("dddd");
+
+  var options = {
+    wallpapers: wallpapers,
+    screens: screens,
+    settings: settings,
+    callback: callback
+  };
+
+  wallpaperProcess.send({ options: options });
   wallpaperProcess.on('message', function(e){
     console.log(e);
   });
@@ -861,5 +867,5 @@ function isImage(data){
   return false;
 }
 
-rmDir(tempDir, false);
+rmDir(settings.local.tempDir, false);
 console.log("Temp files cleaned");
