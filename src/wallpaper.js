@@ -6,8 +6,8 @@ var nodeWallpaper = require('wallpaper');
 
 //parent process order to start the process
 process.on('message', function(m){
-  createWallpaper(m.options.wallpapers, m.options.screens, m.options.settings, function(){
-    console.log("k");
+  createWallpaper(m.options.wallpapers, m.options.screens, m.options.settings, function(err){
+    process.send({result: err});
   });
 });
 

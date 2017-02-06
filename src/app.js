@@ -833,7 +833,7 @@ function createWallpaper(wallpapers, screens, callback){
 
   wallpaperProcess.send({ options: options });
   wallpaperProcess.on('message', function(e){
-    console.log(e);
+    callback(e.result);
   });
   wallpaperProcess.on('exit', function (code, signal) {
     console.log('wallpaper Process exited:', code, signal);
