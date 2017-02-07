@@ -4,6 +4,7 @@
 }
 
 body{
+  user-select:none;
   background-color: #2A2E37;
   color: #cccccc;
   font-family: Arial;
@@ -65,7 +66,7 @@ body.overlay{
     }
     75% {
         color:#F781D8;
-        
+
     }
     100% {
       color:#D500F9;
@@ -190,7 +191,12 @@ header{
       height: 100%;
       font-size: 4rem;
       margin-top: 1rem;
+      .mdi{
+        user-select:none;
+      }
       .loading-spinner{
+        cursor: default;
+        user-select:none;
         margin-top:-1rem;
         color:#D500F9;
         animation:bounce 1s linear infinite;

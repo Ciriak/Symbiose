@@ -16,6 +16,7 @@ var regedit = require('regedit');
 var mainFrame;
 var overlayFrame;
 var overlayEnabled = false;
+var wallpaperProcess = null;
 var renderIpc;
 var screens;
 //retreive package.json properties
@@ -820,7 +821,10 @@ ipc.on('installUpdate', function (fileData) {
 function createWallpaper(wallpapers, screens, callback){
 
   //spawn a new process (prevent freeze)
-  var wallpaperProcess = childProcess.fork('wallpaper.js', {
+  if(wallpaperProcess){
+    wallpaperProcess.kill();
+  }
+  wallpaperProcess = childProcess.fork('wallpaper.js', {
     cwd: __dirname
   });
 

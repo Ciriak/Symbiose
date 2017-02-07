@@ -9,22 +9,30 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
 
   //if change on startup is set // generate a first wallpaper
   if($scope.settings.values.local.slideshow.changeOnStartup === true){
-    setTimeout(function(){
-      setWallpaper();
-    }, 3000);
+    setWallpaper();
   }
 
   ipcRenderer.on("wallpaperSet", function(event, wallpaper){
     $scope.processing = false;
     console.log("Wallpaper set");
-    jobTimeout = setTimeout(function(){
-      setWallpaper();
-    }, 10000);
+    setWallpaperTimeout();
     if(!$scope.$$phase) {
       $scope.$apply();
     }
 
   });
+
+  $scope.forceNext = function(){
+    clearTimeout(jobTimeout);
+    setWallpaper();
+  };
+
+  function setWallpaperTimeout(){
+    clearTimeout(jobTimeout);
+    jobTimeout = setTimeout(function(){
+      setWallpaper();
+    }, $scope.settings.values.local.slideshow.changeDelay*60*1000);
+  }
 
   //generate an array of wallpapers based on the screens count
   //and send a query to the main process

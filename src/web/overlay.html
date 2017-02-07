@@ -20,7 +20,7 @@
       </div>
 
       <div class="slideshow-item currents" ng-repeat="item in settings.values.local.slideshow.currents" ng-class="{'processing': processing}">
-        <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}" ng-class="{'new': animNew === true}">
+        <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}">
         </div>
         <div class="slideshow-content">
           <div class="loading-spinner" ng-show="processing">
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="slideshow-item currents">
+      <div class="slideshow-item" ng-click="forceNext()">
         <div class="slideshow-img">
 
         </div>
