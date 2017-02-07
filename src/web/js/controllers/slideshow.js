@@ -37,8 +37,28 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
     }
 
     $scope.processing = true;
-    console.log("Processing wallpaper...");
+
+    //add the current wallpaper to the history if exist and set the new as current one
+
+    if($scope.settings.values.local.slideshow.currents && $scope.settings.values.local.slideshow.currents.length > 0){
+      for (var i = 0; i < $scope.settings.values.local.slideshow.currents.length; i++) {
+        if(!  $scope.settings.values.local.slideshow.previous){
+            $scope.settings.values.local.slideshow.previous = [];
+        }
+        $scope.settings.values.local.slideshow.previous.push(angular.copy($scope.settings.values.local.slideshow.currents[i]));
+      }
+    }
+
+    $scope.settings.values.local.slideshow.currents = wallpapers;
+
     ipcRenderer.send("setWallpaper", wallpapers);
+    $scope.animNew = true;
+    setTimeout(function(){
+      $scope.animNew = false;
+      if(!$scope.$$phase) {
+        $scope.$apply();
+      }
+    }, 1000);
     if(!$scope.$$phase) {
       $scope.$apply();
     }

@@ -7,10 +7,37 @@
     <link rel="stylesheet" href="dep/animate.css/animate.min.css">
     <link rel="stylesheet" href="css/symbiose.css" />
   </head>
-  <body>
+  <body class="overlay">
     <div class="slideshow" ng-controller="slideshowCtrl" ng-init="slideshowJob()">
-      <p ng-show="processing">PROCESSING...</p>
-      <div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items">
+
+      <div class="slideshow-item currents" ng-repeat="item in settings.values.local.slideshow.previous | limitTo:-1">
+        <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}" ng-class="{'new': animNew === true}">
+
+        </div>
+        <div class="item-content">
+
+        </div>
+      </div>
+
+      <div class="slideshow-item currents" ng-repeat="item in settings.values.local.slideshow.currents" >
+        <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}" ng-class="{'new': animNew === true}">
+        </div>
+        <div class="item-content">
+
+        </div>
+      </div>
+
+      <div class="slideshow-item currents">
+        <div class="slideshow-img">
+
+        </div>
+        <div class="item-content">
+          Random item from your gallery in :
+        </div>
+      </div>
+
+
+      <!--<div class="slideshow-item" ng-repeat="item in settings.values.local.slideshow.items">
         <div ng-if="item.type === 'gallery'">
           Random wallpaper from your gallery
         </div>
@@ -21,7 +48,7 @@
           Defined wallpaper
         </div>
       </div>
-    </div>
+    </div>-->
 
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
