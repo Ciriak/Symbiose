@@ -46,12 +46,17 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
             $scope.settings.values.local.slideshow.previous = [];
         }
         $scope.settings.values.local.slideshow.previous.push(angular.copy($scope.settings.values.local.slideshow.currents[i]));
+        //limit the array to 20 elements
+        if($scope.settings.values.local.slideshow.previous.length > 20){
+          $scope.settings.values.local.slideshow.previous.splice(0, 1);
+        }
       }
     }
 
     $scope.settings.values.local.slideshow.currents = wallpapers;
 
     ipcRenderer.send("setWallpaper", wallpapers);
+    $scope.settings.save();
     $scope.animNew = true;
     setTimeout(function(){
       $scope.animNew = false;

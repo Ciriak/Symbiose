@@ -14,16 +14,18 @@
         <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}" ng-class="{'new': animNew === true}">
 
         </div>
-        <div class="item-content">
+        <div class="slideshow-content">
 
         </div>
       </div>
 
-      <div class="slideshow-item currents" ng-repeat="item in settings.values.local.slideshow.currents" >
+      <div class="slideshow-item currents" ng-repeat="item in settings.values.local.slideshow.currents" ng-class="{'processing': processing}">
         <div class="slideshow-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}" ng-class="{'new': animNew === true}">
         </div>
-        <div class="item-content">
-
+        <div class="slideshow-content">
+          <div class="loading-spinner" ng-show="processing">
+            ...
+          </div>
         </div>
       </div>
 
@@ -31,8 +33,8 @@
         <div class="slideshow-img">
 
         </div>
-        <div class="item-content">
-          Random item from your gallery in :
+        <div class="slideshow-content">
+          <i class="mdi mdi-chevron-right"></i>
         </div>
       </div>
 
@@ -53,6 +55,7 @@
     <!-- require scripts -->
     <script src="dep/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
     <script src="dep/angular/angular.min.js"></script>
+    <script src="http://localhost:35729/livereload.js" charset="utf-8"></script>
     <!-- used to cummunicate with angular & electron -->
     <script src="dep/angular-electron/angular-electron.min.js"></script>
     <!-- -->
