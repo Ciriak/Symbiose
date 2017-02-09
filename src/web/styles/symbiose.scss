@@ -213,6 +213,25 @@ header{
       opacity: 0.4;
     }
   }
+  .overlay-menu{
+    position: absolute;
+    display: inline-block;
+    top: 7px;
+    .menu-item{
+      background-color: #212121;
+      border: 1px #000 solid;
+      border-radius: 3px;
+      margin: 5px;
+      padding: 5px;
+      font-size: 1rem;
+      color: #ccc;
+      transition-duration: 0.3s;
+    }
+    .menu-item:hover{
+      color:#fff;
+      cursor: pointer;
+    }
+  }
 }
 
 .settings{

@@ -28,6 +28,7 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
   };
 
   function setWallpaperTimeout(){
+    console.log($scope.settings.values.local);
     clearTimeout(jobTimeout);
     jobTimeout = setTimeout(function(){
       setWallpaper();

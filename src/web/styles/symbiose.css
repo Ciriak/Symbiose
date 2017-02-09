@@ -3,6 +3,7 @@
   src: url("../fonts/Orbitron-Regular.ttf"); }
 
 body {
+  user-select: none;
   background-color: #2A2E37;
   color: #cccccc;
   font-family: Arial;
@@ -16,42 +17,44 @@ body.overlay {
 
 .logo {
   font-family: 'Orbitron', sans-serif; }
-
-.logo-objects {
-  margin-top: calc(50vh - 100px);
-  position: relative; }
-
-.square {
-  position: absolute;
-  border: 1px #AA00FF solid;
-  width: 100px;
-  height: 100px;
-  border-radius: 45px; }
-
-.l-container {
-  color: #D500F9;
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem; }
-
-.first {
-  animation: spin 4s linear infinite; }
-
-.second {
-  animation: spin 3s linear infinite; }
-
-.third {
-  animation: spin 2s linear infinite; }
+  .logo .logo-objects {
+    margin-top: calc(50vh - 100px);
+    position: relative; }
+  .logo .square {
+    position: absolute;
+    border: 1px #AA00FF solid;
+    width: 100px;
+    height: 100px;
+    border-radius: 45px; }
+  .logo .l-container {
+    color: #D500F9;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem; }
+  .logo .first {
+    animation: spin 4s linear infinite; }
+  .logo .second {
+    animation: spin 3s linear infinite; }
+  .logo .third {
+    animation: spin 2s linear infinite; }
 
 @keyframes spin {
   from {
     transform: rotate(0deg); }
   to {
     transform: rotate(360deg); } }
+
+@keyframes bounce {
+  50% {
+    color: #D500F9; }
+  75% {
+    color: #F781D8; }
+  100% {
+    color: #D500F9; } }
 
 header {
   -webkit-app-region: drag;
@@ -147,9 +150,41 @@ header {
       background-size: cover;
       transition-duration: 0.3s; }
     .slideshow .slideshow-item .slideshow-img.new {
-      opacity: 0; }
+      opacity: 0 !important; }
+    .slideshow .slideshow-item .slideshow-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      font-size: 4rem;
+      margin-top: 1rem; }
+      .slideshow .slideshow-item .slideshow-content .mdi {
+        user-select: none; }
+      .slideshow .slideshow-item .slideshow-content .loading-spinner {
+        cursor: default;
+        user-select: none;
+        margin-top: -1rem;
+        color: #D500F9;
+        animation: bounce 1s linear infinite; }
   .slideshow .slideshow-item:hover .slideshow-img {
     opacity: 0.7; }
+  .slideshow .slideshow-item.processing .slideshow-img {
+    opacity: 0.4; }
+  .slideshow .overlay-menu {
+    position: absolute;
+    display: inline-block;
+    top: 7px; }
+    .slideshow .overlay-menu .menu-item {
+      background-color: #212121;
+      border: 1px #000 solid;
+      border-radius: 3px;
+      margin: 5px;
+      padding: 5px;
+      font-size: 1rem;
+      color: #ccc;
+      transition-duration: 0.3s; }
+    .slideshow .overlay-menu .menu-item:hover {
+      color: #fff;
+      cursor: pointer; }
 
 .settings {
   padding: 20px; }

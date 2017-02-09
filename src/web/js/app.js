@@ -138,6 +138,7 @@ app.controller('mainCtrl', ['$scope', '$http', '$rootScope', '$translate' ,'$win
     },
     save: function(){
       ipcRenderer.send('saveSettings', this.values);
+      console.log(this.values);
     }
   };
 
