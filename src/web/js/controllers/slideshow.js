@@ -12,6 +12,10 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
     setWallpaper();
   }
 
+  $scope.mainProcessCall = function(call){
+    ipcRenderer.send("mainProcessCall", call);
+  };
+
   ipcRenderer.on("wallpaperSet", function(event, wallpaper){
     $scope.processing = false;
     console.log("Wallpaper set");

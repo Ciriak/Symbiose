@@ -33,6 +33,8 @@ var settings = {
     enableAssistant: true,
     managedByOS: true,
     slideshow: {
+      changeOnStartup: true,
+      changeDelay: 3,
       items: []
     }
   },
@@ -338,6 +340,11 @@ function initApp(callback){
 
   });
 }
+
+//Used for calling a main process function from the client
+ipc.on('mainProcessCall', function(event, func, args) {
+  window[func](args);
+});
 
 //send the wallpaper sources to the client when asked
 ipc.on('sources', function(event) {
