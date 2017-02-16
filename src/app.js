@@ -220,13 +220,13 @@ function generateTray(){
     {
       label: 'Gallery',
       click: function(){
-        openApp();
+        global.openApp();
       }
     },
     {
       label: 'Settings',
       click: function(){
-        openApp();
+        global.openApp();
       }
     },
     {
@@ -237,19 +237,24 @@ function generateTray(){
     }
   ]);
   tray.on('click', function(){
-    toggleOverlay();
+    global.toggleOverlay();
   });
   tray.setToolTip('Symbiose is running...');
   tray.setContextMenu(contextMenu);
 }
 
-function openApp(){
+global.openApp = function(){
   mainFrame.show();
   mainFrame.focus();
-}
+};
 
 //open or close the overlay : force = open or close
-function toggleOverlay(force){
+global.toggleOverlay = function(force){
+  if(force === 'close'){
+    overlayFrame.hide();
+    overlayEnabled = false;
+    return;
+  }
   if(!overlayEnabled || force === 'open'){
     overlayFrame.show();
     overlayFrame.focus();
@@ -259,8 +264,7 @@ function toggleOverlay(force){
     overlayFrame.hide();
     overlayEnabled = false;
   }
-
-}
+};
 
 //open the tagifier main process
 function loadFrames(){
@@ -341,9 +345,11 @@ function initApp(callback){
   });
 }
 
-//Used for calling a main process function from the client
+//Used for calling a global function from the client
 ipc.on('mainProcessCall', function(event, func, args) {
-  window[func](args);
+  var w = BrowserWindow.fromWebContents(event.sender.webContents);
+  global[func](args);
+  global.toggleOverlay('close');
 });
 
 //send the wallpaper sources to the client when asked

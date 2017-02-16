@@ -16,6 +16,10 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
     ipcRenderer.send("mainProcessCall", call);
   };
 
+  $scope.frameInteraction = function(call){
+    ipcRenderer.send("frameInteraction", call);
+  };
+
   ipcRenderer.on("wallpaperSet", function(event, wallpaper){
     $scope.processing = false;
     console.log("Wallpaper set");
@@ -81,6 +85,19 @@ app.controller('slideshowCtrl', function($scope, $rootScope, $http, $translate, 
       $scope.$apply();
     }
   }
+
+  document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var isEscape = false;
+    if ("key" in evt) {
+        isEscape = (evt.key == "Escape" || evt.key == "Esc");
+    } else {
+        isEscape = (evt.keyCode == 27);
+    }
+    if (isEscape) {
+      $scope.mainProcessCall('toggleOverlay', 'close');
+    }
+  };
 
   //retreive the array of wallpapers
   function retreiveWallpapers(){
