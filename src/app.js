@@ -418,8 +418,8 @@ ipc.on('saveSettings', function(event, data){
 });
 
 ipc.on('setFullScreen', function(event, setFullScreen){
-  mainWindow.setFullScreen(setFullScreen);
-  mainWindow.setAlwaysOnTop(setFullScreen);
+  mainFrame.setFullScreen(setFullScreen);
+  mainFrame.setAlwaysOnTop(setFullScreen);
 });
 
 

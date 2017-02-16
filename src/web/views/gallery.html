@@ -13,8 +13,18 @@
       <i class="mdi mdi-delete"></i>
     </div>
   </div>
-  <div class="gallery-item" ng-repeat="item in settings.values.gallery.wallpapers">
-    <div class="item-img" ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}"></div>
-    <div class="item-menu"></div>
+  <div class="gallery-content">
+    <div class="gallery-item" ng-repeat="item in settings.values.gallery.wallpapers">
+      <div class="item-img"
+      ng-style="{'background-image' : 'url('+getLocalUri(item.localUri)+')'}"
+      ng-click="preview.set(item)"
+      ></div>
+      <div class="item-menu">
+        <div class="item-menu-item">
+          <i class="mdi mdi-close"></i>
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>
