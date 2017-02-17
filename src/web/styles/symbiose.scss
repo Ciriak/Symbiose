@@ -160,12 +160,15 @@ header{
   .gallery-tools{
     position: fixed;
     top: 55px;
+    width: calc(100% - 20px);
+    background-color: #2A2E37;
+    z-index: 3;
     .tool{
       display: inline-block;
       font-size: 1.3rem;
       margin: 10px;
       margin-top: 15px;
-      margin-bottom: 0;
+      margin-bottom: 15;
       padding: 5px;
       color:#fff;
       width: 24px;
