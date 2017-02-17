@@ -110,6 +110,52 @@ header{
   overflow-y: auto;
 }
 
+.modal{
+  position: fixed;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 0.5s;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  margin-top: -100vh;
+  .modal-content{
+    transition-duration: 0.3s;
+    background-color:#212121;
+    margin: auto;
+    margin-top: -30vh;
+    width: 500px;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px #000 solid;
+    .modal-header{
+      padding: 10px;
+      font-size: 1.5rem;
+      border-bottom: 1px #000 solid;
+    }
+    .modal-body{
+      padding: 10px;
+    }
+    .modal-footer{
+      padding: 10px;
+      text-align: right;
+    }
+  }
+}
+
+/* active modal*/
+.modal.active{
+  margin-top: 0;
+  opacity: 1.0;
+  .modal-content{
+    margin-top: 30vh;
+  }
+}
+
 .gallery{
   .gallery-tools{
     position: fixed;
@@ -339,6 +385,11 @@ button{
   min-width: 100px;
   transition-duration: 0.3s;
   outline: none;
+}
+
+button.primary{
+  background-color: rgba(170, 0, 255, 0.3);
+  border: 1px #AA00FF solid;
 }
 
 button:hover{
