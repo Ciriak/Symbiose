@@ -41,6 +41,18 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 		genSizes();
 	});
 
+	$scope.removeModal = {
+		item : null,
+		remove: function(){
+			$rootScope.settings.removeWallpaper(item);
+			$scope.removeModal.item = null;
+		},
+		undo: function(){
+			console.log('sucedesbite');
+			$scope.removeModal.item = null;
+		}
+	}
+
 	function genSizes(){
 		//update the screens sizes
 		for (var i = 0; i < $scope.screens.displays.length; i++) {

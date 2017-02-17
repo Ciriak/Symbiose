@@ -20,9 +20,24 @@
       ng-click="preview.set(item)"
       ></div>
       <div class="item-menu">
-        <div class="item-menu-item">
+        <div class="item-menu-item" ng-click="removeModal.item = item">
           <i class="mdi mdi-close"></i>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal remove-item-modal" ng-class="{'active' : removeModal.item !== null}">
+    <div class="modal-content">
+      <div class="modal-header">
+        Removing item
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove this item ?
+      </div>
+      <div class="modal-footer">
+        <button ng-click="removeModal.undo()">Not sure</button>
+        <button class="primary" ng-click="removeModal.remove()">Remove</button>
       </div>
     </div>
   </div>
