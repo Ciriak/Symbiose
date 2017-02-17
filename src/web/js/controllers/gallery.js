@@ -44,7 +44,7 @@ app.controller('galleryCtrl', function($scope, $rootScope, $http, $translate, $l
 	$scope.removeModal = {
 		item : null,
 		remove: function(){
-			$rootScope.settings.removeWallpaper(item);
+			$rootScope.settings.removeWallpaper($scope.removeModal.item);
 			$scope.removeModal.item = null;
 		},
 		undo: function(){
